@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Absolon Designs | Terence Absolon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+     :root {
+      --primary: #8E633B;
+      --bg-gradient: linear-gradient(135deg, #e0eafc, #cfdef3);
+      --dark-bg: #262125;
+      --light-text: #ffffff;
+    }
+      
+
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-gradient);
+      color: #1a1a1a;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      transition: background 0.5s ease, color 0.5s ease;
+
+
+    }
+
+    body.dark-mode {
+      background: var(--dark-bg);
+      color: var(--light-text);
+        background-image: url(https://thurnix01.github.io/absolondesigns/images/hero_img.jpg);
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    header {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0);
+      position: absolute;
+      transform: translate(-50%, 0%);
+     left: 50%;
+      width: 100%;
+      max-width: 1200px;
+      top: 0;
+      z-index: 100;
+/*      backdrop-filter: blur(8px);*/
+    }
+
+    body.dark-mode header {
+      background: rgba(26, 26, 26, 0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      transition: color 0.3s ease;
+    }
+
+    body:not(.dark-mode) .logo {
+      color: #000;
+      mix-blend-mode: difference;
+    }
+
+    body.dark-mode .logo {
+      color: #fff;
+    }
+
+    .socials a {
+      margin: 0 0.5rem;
+      color: inherit;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+
+    .socials a:hover {
+      color: var(--primary);
+    }
+
+    .toggle-dark {
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-left: 1rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+        font-weight: 200;
+    }
+
+    .hero.visible h1,
+    .hero.visible p {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-photo {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      margin: 1rem auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1.2s ease;
+    }
+
+    .hero.visible .hero-photo {
+      opacity: 1;
+      transform: translateY(0);
+      }
+
+      .portfolio {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 3rem 2rem;
+      }
+
+      .project {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+      opacity: 0;
+      min-width: 200px;
+      max-width: 300px;
+      width: 100%;
+
+      }
+
+      body.dark-mode .project {
+      background: #2a2a2a;
+    }
+
+    .project.visible {
+      opacity: 1;
+
+    }
+
+    .project:hover {
+          transform: scaleX(1.010) scaleY(1.010);
+      box-shadow: 0 16px 24px rgba(0,0,0,0.15);
+    }
+
+    .project img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .project-content {
+      padding: 1rem;
+    }
+
+    .project-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .project-content h3:hover {
+      color: var(--primary);
+    cursor: default;
+    }
+
+    .project-content p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-content a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .contact {
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .contact h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact form {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact input, .contact textarea {
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .contact button {
+      padding: 1rem;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .contact button:hover {
+      background: #6D4A2A;
+    }
+
+    .resume-button {
+      margin-top: 1.5rem;
+    }
+
+    .resume-button a {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .resume-button a:hover {
+      background: #6D4A2A;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #ffffff33;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body class="dark-mode">
+  <header>
+    <div class="logo"><img src="https://thurnix01.github.io/absolondesigns/images/absolon_designs_logo_blk_edit.gif" alt="absolondesigns logo" style="max-width: 120px; width: 100%; height: auto;"></div>
+    <div class="socials">
+      <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+      <a href="#" target="_blank"><i class="fab fa-dribbble"></i></a>
+      <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+      <span class="toggle-dark" id="toggleDark"><i class="fas fa-adjust"></i></span>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <img src="https://thurnix01.github.io/absolondesigns/pages/images/profile.jpg" alt="Terence Absolon" class="hero-photo">
+    <h1>Hi, I'm Terence Absolon</h1>
+    <p>I’m always looking for ways to grow—both professionally and personally. My goal is to find opportunities that push my design skills further while letting me thrive in a creative, dynamic environment. With a strong background in web development, production design, animation, I bring a mix of strategy, hands-on expertise, and a passion for making things that truly connect with people. Add in my ability to collaborate and communicate effectively, and I’m confident in my ability to make an impact wherever I go.</p>
+    <div class="resume-button">
+      <a href="https://example.com/resume.pdf" target="_blank">Download Resume</a>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="project">
+        <a href="https://example.com/project1" > <img src="https://thurnix01.github.io/absolondesigns/pages/images/preview_04.jpg" alt="Project 1"></a>
+      <div class="project-content">
+        <h3>Project One</h3>
+        <p>Branding and UI design project for a startup app with an emphasis on user flow and bold interface.</p>
+        <a href="https://example.com/project1" >View Project</a>
+      </div>
+    </div>
+    <div class="project">
+        <a href="https://example.com/project2" ><img src="https://thurnix01.github.io/absolondesigns/pages/images/preview_05.jpg" alt="Project 2"></a>
+      <div class="project-content">
+        <h3>Project Two</h3>
+        <p>Interactive website with custom animations and storytelling layouts for an artist’s portfolio.</p>
+        <a href="https://example.com/project2" >View Project</a>
+      </div>
+    </div>
+    <div class="project">
+        <a href="https://example.com/project3" ><img src="https://thurnix01.github.io/absolondesigns/images/preview_03.jpg" alt="Project 3"></a>
+      <div class="project-content">
+        <h3>Project Three</h3>
+        <p>Minimalist e-commerce experience optimized for mobile with smooth transitions and clean design.</p>
+        <a href="https://example.com/project3" >View Project</a>
+      </div>
+    </div>
+    
+        <div class="project">
+            <a href="https://example.com/project4" ><img src="https://thurnix01.github.io/absolondesigns/images/preview_01.jpg" alt="Project 4"></a>
+      <div class="project-content">
+        <h3>Project Four</h3>
+        <p>Minimalist e-commerce experience optimized for mobile with smooth transitions and clean design.</p>
+        <a href="https://example.com/project4" >View Project</a>
+      </div>
+    </div>
+    
+        <div class="project">
+            <a href="https://example.com/project5" ><img src="https://thurnix01.github.io/absolondesigns/images/preview_02.jpg" alt="Project 5"></a>
+      <div class="project-content">
+        <h3>Project Five</h3>
+        <p>Minimalist e-commerce experience optimized for mobile with smooth transitions and clean design.</p>
+        <a href="https://example.com/project5" >View Project</a>
+      </div>
+    </div>
+    
+    
+  </section>
+
+  <section class="contact">
+    <h2>Contact Me</h2>
+<form action="https://formsubmit.co/absolondesigns@gmail.com" method="POST">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="email" name="email" placeholder="Your Email" required>
+  <textarea name="message" placeholder="Your Message" required></textarea>
+  
+  <!-- Optional: redirect after submission -->
+  <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
+  
+  <!-- Optional: disable CAPTCHA -->
+  <input type="hidden" name="_captcha" value="false">
+
+  <button type="submit">Send</button>
+</form>
+  </section>
+
+  <footer>
+    &copy; 2025 Terence Absolon | Absolon Designs
+  </footer>
+
+  <script>
+    // Dark mode toggle
+    document.getElementById("toggleDark").addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+    });
+
+    // Scroll animation for project fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.project').forEach(project => {
+      observer.observe(project);
+    });
+
+    // Animate hero section on load
+    window.addEventListener("load", () => {
+      document.getElementById("hero").classList.add("visible");
+    });
+  </script>
+</body>
+ 
+ 
