@@ -30,13 +30,13 @@ export default function Home() {
 
         <main>
           <Hero />
+          <FinalCTA />
           <Problem />
           <Solution />
           <HowItWorks />
           <Features />
           <Testimonials />
           <Pricing />
-          <FinalCTA />
         </main>
 
         <Footer />
