@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/Button";
 import { supabase } from "@/lib/supabase";
 
-const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "your_site";
+const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca";
 const LEAD_CLIENT_ID = process.env.NEXT_PUBLIC_LEAD_CLIENT_ID || null;
 
 function validate(values) {
