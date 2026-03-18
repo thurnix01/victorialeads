@@ -20,8 +20,22 @@ export function Footer() {
             <a href="#pricing" className="text-slate-600 hover:text-slate-900 transition">
               Pricing
             </a>
-            <a href="mailto:hello@example.com" className="text-slate-600 hover:text-slate-900 transition">
-              hello@example.com
+            <a href="mailto:info@victorialeads.ca" className="text-slate-600 hover:text-slate-900 transition">
+              info@victorialeads.ca
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-slate-700">Have more questions? We are happy to help.</p>
+            <a
+              href="mailto:info@victorialeads.ca?subject=Question%20about%20AI%20Lead%20Engine"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+            >
+              Get in touch
             </a>
           </div>
         </div>

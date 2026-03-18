@@ -4,10 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "status": "git status --short --branch",
+    "test": "echo \"No tests configured\"",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "npx serve@latest out -l 3000",
+    "preview": "npm run start",
+    "deploy:github": "git pull --rebase origin main && git push origin main",
+    "deploy": "npm run build && npm run deploy:github",
+    "check:live": "curl -I https://victorialeads.ca/"
   },
   "keywords": [],
   "author": "",
