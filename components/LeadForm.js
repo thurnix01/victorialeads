@@ -75,14 +75,18 @@ export function LeadForm({ compact = false }) {
     setSubmitError("");
     setTouched({ businessName: true, name: true, email: true, phone: true });
     if (Object.keys(errors).length) return;
-
+  
     if (!supabase) {
       setSubmitError("Supabase is not configured yet. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
       return;
     }
-
+  
     setStatus("submitting");
+  
     try {
+      // ✅ DEFINE CLIENT EMAIL HERE (for now)
+      const CLIENT_EMAIL = process.env.NEXT_PUBLIC_CLIENT_EMAIL || "youremail@test.com";
+  
       const { error } = await supabase.from("leads").insert([
         {
           name: values.name,
@@ -91,11 +95,14 @@ export function LeadForm({ compact = false }) {
           business_name: values.businessName,
           source: LEAD_SOURCE,
           client_id: LEAD_CLIENT_ID,
+  
+          // 🔥 THIS IS THE KEY FIX
+          client_email: CLIENT_EMAIL,
         },
       ]);
-
+  
       if (error) throw error;
-
+  
       setStatus("success");
     } catch (error) {
       setStatus("idle");
