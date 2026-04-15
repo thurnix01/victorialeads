@@ -1,0 +1,2 @@
+id,created_at,full_name,business_name,email,phone,website,service_interest,message,city,status,replied,booked,follow_up_count,follow_up_sent,last_follow_up_at,lead_source,ai_headline_1,ai_headline_2,ai_description_1,bannerbear_image_url,notes
+,2026-04-14 15:00:00,John Smith,Acme Roofing,john@acmeroofing.com,250-555-0123,https://acmeroofing.com,Lead Generation,"Looking for help getting more roofing leads in Victoria.",Victoria,new,false,false,0,false,,website_form,,,,,
