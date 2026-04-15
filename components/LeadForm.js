@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 
 const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca";
 const LEAD_CLIENT_ID = process.env.NEXT_PUBLIC_LEAD_CLIENT_ID || null;
+const LEAD_CLIENT_EMAIL = process.env.NEXT_PUBLIC_CLIENT_EMAIL || "info@victorialeads.ca";
 
 function validate(values) {
   const errors = {};
@@ -84,9 +85,6 @@ export function LeadForm({ compact = false }) {
     setStatus("submitting");
   
     try {
-      // ✅ DEFINE CLIENT EMAIL HERE (for now)
-      const CLIENT_EMAIL = process.env.NEXT_PUBLIC_CLIENT_EMAIL || "youremail@test.com";
-  
       const { error } = await supabase.from("leads").insert([
         {
           name: values.name,
@@ -95,9 +93,7 @@ export function LeadForm({ compact = false }) {
           business_name: values.businessName,
           source: LEAD_SOURCE,
           client_id: LEAD_CLIENT_ID,
-  
-          // 🔥 THIS IS THE KEY FIX
-          client_email: CLIENT_EMAIL,
+          client_email: LEAD_CLIENT_EMAIL.trim(),
         },
       ]);
   
