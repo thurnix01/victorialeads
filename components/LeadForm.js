@@ -40,7 +40,7 @@ function Field({ label, name, value, onChange, placeholder, error, type = "text"
         placeholder={placeholder}
         className={[
           "mt-2 w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition",
-          error ? "border-rose-300 ring-2 ring-rose-100" : "border-slate-200 focus:ring-2 focus:ring-slate-900/10",
+          error ? "border-rose-300 ring-2 ring-rose-100" : "border-slate-200 focus:ring-2 focus:ring-teal-600/25",
         ].join(" ")}
         aria-invalid={error ? "true" : "false"}
         aria-describedby={error ? `${id}-error` : undefined}
@@ -113,7 +113,7 @@ export function LeadForm({ compact = false }) {
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
         <div className="text-sm font-semibold text-emerald-900">Request received.</div>
         <p className="mt-2 text-sm text-emerald-800/90">
-          We’ll reach out shortly to confirm details and show you exactly how the AI Lead Engine works.
+          We’ll reach out shortly to confirm details and walk you through how Victoria Leads AI fits your business.
         </p>
         <button
           type="button"
@@ -139,7 +139,7 @@ export function LeadForm({ compact = false }) {
             name="businessName"
             value={values.businessName}
             onChange={onChange}
-            placeholder="e.g., Westshore Roofing"
+            placeholder="e.g., your trade or company name"
             error={show("businessName")}
             autoComplete="organization"
           />
@@ -182,7 +182,7 @@ export function LeadForm({ compact = false }) {
       </div>
 
       <Button type="submit" disabled={status === "submitting"} className="w-full">
-        {status === "submitting" ? "Submitting…" : "Book a Free Demo"}
+        {status === "submitting" ? "Submitting…" : "Book a free demo"}
       </Button>
 
       {submitError ? (
@@ -190,7 +190,7 @@ export function LeadForm({ compact = false }) {
       ) : null}
 
       <p className="text-xs text-slate-500">
-        By submitting, you agree to be contacted about the AI Lead Engine. No spam.
+        By submitting, you agree to be contacted about Victoria Leads AI. No spam.
       </p>
     </form>
   );

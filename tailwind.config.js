@@ -6,7 +6,19 @@ module.exports = {
     "./lib/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brand: {
+          950: "#0c1e2e",
+          900: "#132f45",
+          800: "#1a3d56",
+        },
+      },
+      backgroundImage: {
+        "hero-mesh":
+          "radial-gradient(ellipse 90% 60% at 50% -25%, rgba(13, 148, 136, 0.18), transparent 55%), radial-gradient(ellipse 60% 45% at 100% 0%, rgba(19, 47, 69, 0.08), transparent 50%)",
+      },
+    },
   },
   plugins: [],
 }

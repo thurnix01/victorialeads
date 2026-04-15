@@ -6,7 +6,7 @@ function NavLink({ href, children }) {
   return (
     <a
       href={href}
-      className="text-sm font-medium text-slate-700 hover:text-slate-900 transition"
+      className="text-sm font-medium text-slate-600 hover:text-brand-900 transition"
     >
       {children}
     </a>
@@ -26,24 +26,24 @@ export function Header() {
   return (
     <div
       className={[
-        "sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-white/70",
-        isScrolled ? "border-slate-200 bg-white/80" : "border-transparent bg-white/50",
+        "sticky top-0 z-50 border-b backdrop-blur-md supports-[backdrop-filter]:bg-white/75",
+        isScrolled ? "border-slate-200/90 bg-white/90 shadow-sm shadow-slate-900/5" : "border-transparent bg-white/60",
       ].join(" ")}
     >
       <Container className="flex h-16 items-center justify-between">
-        <a href="#top" className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-xl bg-slate-900 text-white grid place-items-center shadow-sm">
-            <span className="text-sm font-bold">AI</span>
+        <a href="#top" className="flex items-center gap-2.5">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-teal-600 to-brand-900 text-white grid place-items-center shadow-md shadow-teal-900/15">
+            <span className="text-xs font-bold tracking-tight">VL</span>
           </div>
           <div className="leading-tight">
-            <div className="text-sm font-semibold text-slate-900">AI Lead Engine</div>
-            <div className="text-xs text-slate-500">Roofing • Victoria, BC</div>
+            <div className="text-sm font-semibold text-brand-900">Victoria Leads AI</div>
+            <div className="text-xs text-slate-500">Victoria, BC &amp; surrounding areas</div>
           </div>
         </a>
 
         <nav className="hidden md:flex items-center gap-6">
           <NavLink href="#how">How it works</NavLink>
-          <NavLink href="#features">Features</NavLink>
+          <NavLink href="#features">What’s included</NavLink>
           <NavLink href="#proof">Results</NavLink>
           <NavLink href="#pricing">Pricing</NavLink>
         </nav>
@@ -55,11 +55,10 @@ export function Header() {
             </Button>
           </a>
           <a href="#demo" className="inline-flex">
-            <Button as="span">Get more leads</Button>
+            <Button as="span">Book a demo</Button>
           </a>
         </div>
       </Container>
     </div>
   );
 }
-

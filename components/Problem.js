@@ -7,12 +7,13 @@ export function Problem() {
       <Container>
         <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-5">
-            <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+            <h2 className="text-2xl font-semibold tracking-tight text-brand-900 sm:text-3xl">
               Marketing shouldn’t feel like gambling.
             </h2>
-            <p className="mt-4 text-slate-600 leading-relaxed">
-              If you’re busy running jobs, you don’t have time to babysit ads, rebuild pages, or chase leads.
-              That’s why most roofing companies end up stuck with inconsistent work.
+            <p className="mt-4 leading-relaxed text-slate-600">
+              When you’re busy delivering work, you don’t have time to babysit ads, rebuild pages, or chase every lead
+              manually. Local trades and service businesses often end up with uneven pipelines—and revenue that’s hard
+              to predict.
             </p>
           </div>
 
@@ -20,24 +21,24 @@ export function Problem() {
             <div className="grid gap-4 sm:grid-cols-3">
               {[
                 {
-                  title: "Tired of paying for ads that don’t convert?",
-                  body: "Clicks aren’t the goal. Booked jobs are.",
+                  title: "Paying for clicks that don’t become booked jobs?",
+                  body: "Traffic isn’t the goal—qualified leads and revenue are.",
                 },
                 {
-                  title: "Relying on referrals and slow seasons?",
-                  body: "Referrals are great—until they dry up.",
+                  title: "Seasonal swings and referral-only dry spells?",
+                  body: "You need a repeatable way to fill the calendar.",
                 },
                 {
-                  title: "No time to manage marketing?",
-                  body: "You should be estimating and installing, not tweaking campaigns.",
+                  title: "No bandwidth to run campaigns and follow-up?",
+                  body: "Automation and clear workflows should carry the load—not more hours from you.",
                 },
               ].map((card) => (
                 <div
                   key={card.title}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+                  className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm shadow-slate-900/5"
                 >
-                  <div className="text-sm font-semibold text-slate-900">{card.title}</div>
-                  <div className="mt-2 text-sm text-slate-600">{card.body}</div>
+                  <div className="text-sm font-semibold text-brand-900">{card.title}</div>
+                  <div className="mt-2 text-sm leading-relaxed text-slate-600">{card.body}</div>
                 </div>
               ))}
             </div>
@@ -47,4 +48,3 @@ export function Problem() {
     </AnimatedSection>
   );
 }
-

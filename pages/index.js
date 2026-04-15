@@ -11,9 +11,9 @@ import { FinalCTA } from "@/components/FinalCTA";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
-  const title = "AI Lead Engine for Roofing Companies | Victoria, BC";
+  const title = "Victoria Leads AI | Automated Lead Generation for Local Trades | Victoria, BC";
   const description =
-    "Get more roofing jobs in Victoria without hiring a marketing team. Our AI system generates, tests, and optimizes your ads, landing pages, and leads automatically.";
+    "Victoria Leads AI helps local trades and service businesses in Victoria, BC generate more leads, improve follow-up, and turn marketing into measurable revenue through automation, ad creative, campaign support, and conversion-focused workflows.";
 
   return (
     <>

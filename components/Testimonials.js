@@ -15,15 +15,15 @@ function Stars() {
 
 function Quote({ name, company, quote, result }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm shadow-slate-900/5">
       <Stars />
       <p className="mt-4 text-sm leading-relaxed text-slate-700">“{quote}”</p>
       <div className="mt-5 flex items-center justify-between gap-4">
         <div>
-          <div className="text-sm font-semibold text-slate-900">{name}</div>
+          <div className="text-sm font-semibold text-brand-900">{name}</div>
           <div className="text-xs text-slate-500">{company}</div>
         </div>
-        <div className="rounded-xl bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
+        <div className="rounded-xl bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-800 ring-1 ring-teal-600/15">
           {result}
         </div>
       </div>
@@ -37,32 +37,31 @@ export function Testimonials() {
       <Container>
         <SectionHeading
           eyebrow="Results"
-          title="Roofing contractors like predictable leads"
-          subtitle="These are realistic placeholders to show how the page will look with social proof."
+          title="Local service businesses thrive on predictable leads"
+          subtitle="Illustrative examples—replace with your real client stories as you collect them."
         />
 
         <div className="mt-10 grid gap-4 lg:grid-cols-3">
           <Quote
             name="Mike R."
-            company="Victoria Roofing Co."
-            quote="We went from random weeks to consistent inbound leads. The follow-up is easier when the leads are actually qualified."
+            company="Victoria-area contractor"
+            quote="We went from uneven weeks to consistent inbound leads. Follow-up is easier when the system qualifies people before they reach us."
             result="34 leads / 30 days"
           />
           <Quote
             name="Sarah T."
-            company="Westshore Roofing"
-            quote="The landing page is clean and the message is simple. We’re booking more estimates without chasing people."
+            company="Westshore trade services"
+            quote="The pages and messaging are clear. We’re booking more estimates without chasing cold traffic that was never going to buy."
             result="$22 CPL"
           />
           <Quote
             name="Jordan K."
-            company="Saanich Roof Pros"
-            quote="Setup was quick. The system keeps improving week to week and we can finally predict our pipeline."
-            result="+28% conversion"
+            company="Saanich home services"
+            quote="Setup was fast. We finally have a pipeline we can talk about with numbers—not just gut feel."
+            result="+28% conv."
           />
         </div>
       </Container>
     </AnimatedSection>
   );
 }
-

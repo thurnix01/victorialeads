@@ -1,72 +1,48 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
-import { BoltIcon, ChartIcon, TargetIcon } from "@/components/icons";
+import { CheckIcon } from "@/components/icons";
 
-function Card({ icon: Icon, title, body }) {
+const PACKAGE_ITEMS = [
+  "Lead capture forms on client websites or landing pages",
+  "Instant lead notifications",
+  "Automated AI-powered email replies",
+  "Automated follow-up sequences",
+  "Lead tracking inside Supabase",
+  "AI-generated Google Ads and social ad copy",
+  "Figma-based ad creative production",
+  "Campaign-ready assets for Google Ads and Meta",
+  "Analytics tracking and performance review",
+  "Ongoing optimization for better revenue results",
+];
+
+function Item({ text }) {
   return (
-    <div className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-slate-900 text-white shadow-sm">
-          <Icon className="h-5 w-5" />
-        </div>
-        <div className="text-sm font-semibold text-slate-900">{title}</div>
+    <div className="flex gap-3 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm shadow-slate-900/5 transition hover:border-teal-600/25 hover:shadow-md">
+      <div className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-teal-50 ring-1 ring-teal-600/20">
+        <CheckIcon className="text-teal-700" />
       </div>
-      <p className="mt-3 text-sm text-slate-600 leading-relaxed">{body}</p>
+      <p className="text-sm font-medium leading-snug text-slate-700">{text}</p>
     </div>
   );
 }
 
 export function Features() {
-  const items = [
-    {
-      icon: BoltIcon,
-      title: "AI Ad Generation",
-      body: "New ads and angles tested so you don’t stall when performance dips.",
-    },
-    {
-      icon: TargetIcon,
-      title: "Conversion‑Optimized Pages",
-      body: "Fast, mobile-first landing pages built to turn visitors into leads.",
-    },
-    {
-      icon: ChartIcon,
-      title: "Lead Tracking Dashboard",
-      body: "See what’s working and follow up faster with clean reporting.",
-    },
-    {
-      icon: BoltIcon,
-      title: "Ongoing Optimization",
-      body: "Weekly iteration on targeting, copy, and offers to improve ROI.",
-    },
-    {
-      icon: TargetIcon,
-      title: "Local Targeting (Victoria, BC)",
-      body: "Focused on homeowners in your service area—no wasted spend.",
-    },
-    {
-      icon: BoltIcon,
-      title: "Fast Setup (under 7 days)",
-      body: "We move quickly so you can start generating leads this month.",
-    },
-  ];
-
   return (
-    <AnimatedSection id="features" className="scroll-mt-24 py-16 sm:py-20 bg-slate-50/60">
+    <AnimatedSection id="features" className="scroll-mt-24 bg-slate-100/80 py-16 sm:py-20">
       <Container>
         <SectionHeading
-          eyebrow="Features"
-          title="Everything you need to turn clicks into booked jobs"
-          subtitle="A simple, done-for-you system designed for roofing companies—focused on results, not busywork."
+          eyebrow="What it includes"
+          title="Automated Lead Generation & Revenue Builder for Local Businesses"
+          subtitle="These deliverables work together so you generate more leads, improve follow-up, and tie marketing to measurable revenue."
         />
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((it) => (
-            <Card key={it.title} icon={it.icon} title={it.title} body={it.body} />
+        <div className="mt-10 grid gap-3 sm:grid-cols-2">
+          {PACKAGE_ITEMS.map((text) => (
+            <Item key={text} text={text} />
           ))}
         </div>
       </Container>
     </AnimatedSection>
   );
 }
-
