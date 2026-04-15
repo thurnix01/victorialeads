@@ -4,9 +4,8 @@ import { supabase } from "@/lib/supabase";
 
 const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca";
 const LEAD_CLIENT_EMAIL = process.env.NEXT_PUBLIC_CLIENT_EMAIL || "info@victorialeads.ca";
-/** Supabase table name (matches public."My Leads Intake"). Override if renamed. */
-const LEADS_TABLE =
-  process.env.NEXT_PUBLIC_SUPABASE_LEADS_TABLE || "My Leads Intake";
+/** Supabase table name (public.my_leads_intake). Override via NEXT_PUBLIC_SUPABASE_LEADS_TABLE. */
+const LEADS_TABLE = process.env.NEXT_PUBLIC_SUPABASE_LEADS_TABLE || "my_leads_intake";
 
 function validate(values) {
   const errors = {};
