@@ -13,7 +13,7 @@ import { Footer } from "@/components/Footer";
 export default function Home() {
   const title = "Victoria Leads AI | Automated Lead Generation for Local Trades | Victoria, BC";
   const description =
-    "Victoria Leads AI helps local trades and service businesses in Victoria, BC generate more leads, improve follow-up, and turn marketing into measurable revenue through automation, ad creative, campaign support, and conversion-focused workflows.";
+    "Victoria Leads AI helps local trades and service-based businesses in Victoria, BC and surrounding areas generate more leads, improve follow-up, and turn marketing into measurable revenue through automated systems, ad creative, campaign support, and conversion-focused customer workflows.";
 
   return (
     <>
