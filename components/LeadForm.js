@@ -3,8 +3,10 @@ import { Button } from "@/components/Button";
 import { supabase } from "@/lib/supabase";
 
 const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca";
-const LEAD_CLIENT_ID = process.env.NEXT_PUBLIC_LEAD_CLIENT_ID || null;
 const LEAD_CLIENT_EMAIL = process.env.NEXT_PUBLIC_CLIENT_EMAIL || "info@victorialeads.ca";
+/** Supabase table name (matches public."My Leads Intake"). Override if renamed. */
+const LEADS_TABLE =
+  process.env.NEXT_PUBLIC_SUPABASE_LEADS_TABLE || "My Leads Intake";
 
 function validate(values) {
   const errors = {};
@@ -85,15 +87,15 @@ export function LeadForm({ compact = false }) {
     setStatus("submitting");
   
     try {
-      const { error } = await supabase.from("leads").insert([
+      const { error } = await supabase.from(LEADS_TABLE).insert([
         {
-          name: values.name,
+          full_name: values.name,
           email: values.email,
           phone: values.phone,
           business_name: values.businessName,
-          source: LEAD_SOURCE,
-          client_id: LEAD_CLIENT_ID,
-          client_email: LEAD_CLIENT_EMAIL.trim(),
+          lead_source: LEAD_SOURCE,
+          status: "new",
+          notes: `Owner inbox: ${LEAD_CLIENT_EMAIL.trim()}`,
         },
       ]);
   
