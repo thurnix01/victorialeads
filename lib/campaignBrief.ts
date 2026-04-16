@@ -58,6 +58,7 @@ export function buildCampaignBriefNotes(values: CampaignBriefValues): string {
     `Source: ${LEAD_SOURCE}`,
     `Contact: ${values.contactName.trim()} <${values.email.trim()}> ${values.phone.trim()}`,
     values.website.trim() ? `Website: ${values.website.trim()}` : null,
+    `Campaign goal: ${goalLabel(values.goal)}`,
     `Target customer: ${values.targetCustomer.trim()}`,
     values.notes.trim() ? `Additional notes: ${values.notes.trim()}` : null,
   ];
@@ -71,8 +72,13 @@ export type CampaignBriefRow = {
   platform: string;
   service_area: string;
   landing_page_url: string | null;
+  /** Promotional offer / hook from the form (not the goal). */
   offer: string;
-  cta: string;
+  /**
+   * Real CTA button copy (e.g. “Book a Free Estimate”). Intake does not collect this yet;
+   * goals belong in `campaign_goal` + notes, not here.
+   */
+  cta: string | null;
   business_type: string;
   core_services: string;
   trust_points: string | null;
@@ -90,7 +96,7 @@ export function toCampaignBriefRow(values: CampaignBriefValues): CampaignBriefRo
     service_area: values.serviceArea.trim(),
     landing_page_url: values.website.trim() || null,
     offer: values.offer.trim(),
-    cta: goalLabel(values.goal),
+    cta: null,
     business_type: values.businessType.trim(),
     core_services: values.services.trim(),
     trust_points: values.targetCustomer.trim() || null,
