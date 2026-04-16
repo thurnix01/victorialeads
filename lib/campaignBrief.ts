@@ -76,9 +76,9 @@ export type CampaignBriefRow = {
   offer: string;
   /**
    * Real CTA button copy (e.g. “Book a Free Estimate”). Intake does not collect this yet;
-   * goals belong in `campaign_goal` + notes, not here.
+   * goals belong in `campaign_goal` + notes, not here. Empty string if the column is NOT NULL.
    */
-  cta: string | null;
+  cta: string;
   business_type: string;
   core_services: string;
   trust_points: string | null;
@@ -96,7 +96,8 @@ export function toCampaignBriefRow(values: CampaignBriefValues): CampaignBriefRo
     service_area: values.serviceArea.trim(),
     landing_page_url: values.website.trim() || null,
     offer: values.offer.trim(),
-    cta: null,
+    // Avoid misleading goal text in cta; use empty if DB column is NOT NULL without default.
+    cta: "",
     business_type: values.businessType.trim(),
     core_services: values.services.trim(),
     trust_points: values.targetCustomer.trim() || null,
