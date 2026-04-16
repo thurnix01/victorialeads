@@ -127,8 +127,11 @@ export function CampaignBriefForm() {
     setStep((s) => Math.max(1, s - 1));
   }
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  /**
+   * Only step 4 may send data. Steps 1–3 use inputs inside one <form>; pressing Enter in a field
+   * can trigger implicit form submit in browsers—without this guard, that would POST before review.
+   */
+  async function submitCampaignBrief() {
     setSubmitError("");
     setTouchedSteps({ 1: true, 2: true, 3: true });
     const e1 = validateStep(1, values);
@@ -157,6 +160,14 @@ export function CampaignBriefForm() {
       setStatus("idle");
       setSubmitError(supabaseErrorMessage(err));
     }
+  }
+
+  function onFormSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (step !== 4) {
+      return;
+    }
+    void submitCampaignBrief();
   }
 
   if (status === "success") {
@@ -189,7 +200,7 @@ export function CampaignBriefForm() {
   const err = (key: keyof CampaignBriefValues) => (showErrors ? stepErrors[key] : undefined);
 
   return (
-    <form onSubmit={onSubmit} className="space-y-8" noValidate>
+    <form onSubmit={onFormSubmit} className="space-y-8" noValidate>
       {/* Progress */}
       <nav aria-label="Form progress" className="space-y-3">
         <ol className="flex items-center justify-between gap-1 sm:gap-2">
@@ -447,6 +458,9 @@ export function CampaignBriefForm() {
               <div>
                 <h2 className="text-lg font-semibold text-brand-900">Review & send</h2>
                 <p className="mt-1 text-sm text-slate-600">Double-check your details, then submit your brief.</p>
+                <p className="mt-3 rounded-xl border border-teal-200/80 bg-teal-50/80 px-4 py-3 text-sm font-medium text-brand-900">
+                  Nothing is sent until you tap <span className="whitespace-nowrap">“Submit campaign brief”</span> below.
+                </p>
               </div>
               <dl className="divide-y divide-slate-100 rounded-xl border border-slate-100 bg-slate-50/80">
                 <ReviewRow label="Business" value={values.businessName} />
@@ -485,7 +499,11 @@ export function CampaignBriefForm() {
               Next
             </Button>
           ) : (
-            <Button type="submit" disabled={status === "submitting"}>
+            <Button
+              type="button"
+              disabled={status === "submitting"}
+              onClick={() => void submitCampaignBrief()}
+            >
               {status === "submitting" ? "Submitting…" : "Submit campaign brief"}
             </Button>
           )}
