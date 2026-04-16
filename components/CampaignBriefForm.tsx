@@ -11,6 +11,7 @@ import {
   platformLabel,
   toCampaignBriefRow,
 } from "@/lib/campaignBrief";
+import { supabaseErrorMessage } from "@/lib/supabaseErrors";
 
 const STEPS = [
   { id: 1, title: "Business basics", short: "Basics" },
@@ -154,8 +155,7 @@ export function CampaignBriefForm() {
       setStatus("success");
     } catch (err: unknown) {
       setStatus("idle");
-      const message = err instanceof Error ? err.message : "Something went wrong while saving your brief.";
-      setSubmitError(message);
+      setSubmitError(supabaseErrorMessage(err));
     }
   }
 
@@ -477,7 +477,9 @@ export function CampaignBriefForm() {
           )}
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          {submitError ? <p className="text-center text-xs font-medium text-rose-600 sm:text-left">{submitError}</p> : null}
+          {submitError ? (
+            <p className="max-w-full break-words text-left text-xs font-medium text-rose-600 sm:max-w-md">{submitError}</p>
+          ) : null}
           {step < 4 ? (
             <Button type="button" onClick={goNext} disabled={!stepValid}>
               Next
