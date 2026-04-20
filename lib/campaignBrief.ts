@@ -4,13 +4,14 @@ export const CAMPAIGN_BRIEFS_TABLE =
 
 export const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca/start-your-campaign";
 
-/** One primary platform per row — keeps intake simple; split into ad rows in automation if needed. */
+/**
+ * Values must match Postgres `campaign_briefs_platform_check` on your Supabase table.
+ * (TikTok / mixed / etc. are not valid until you extend that constraint or use `notes`.)
+ */
 export const PLATFORM_OPTIONS = [
   { value: "google_ads", label: "Google Ads" },
   { value: "facebook", label: "Facebook" },
   { value: "instagram", label: "Instagram" },
-  { value: "tiktok", label: "TikTok" },
-  { value: "mixed", label: "Mixed / not sure yet" },
 ] as const;
 
 export type PlatformValue = (typeof PLATFORM_OPTIONS)[number]["value"];

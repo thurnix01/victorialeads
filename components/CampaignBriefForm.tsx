@@ -436,7 +436,11 @@ export function CampaignBriefForm() {
                     className={inputClass(err("cta"))}
                   />
                 </Field>
-                <Field label="Platform" id="cbf-platform" hint="Primary channel for this brief.">
+                <Field
+                  label="Platform"
+                  id="cbf-platform"
+                  hint="Pick the main channel. Need TikTok, LinkedIn, or multiple? Say so in Notes — options here must match your database."
+                >
                   <select
                     id="cbf-platform"
                     name="platform"
