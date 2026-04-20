@@ -4,63 +4,68 @@ export const CAMPAIGN_BRIEFS_TABLE =
 
 export const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca/start-your-campaign";
 
+export const PLATFORM_OPTIONS = [
+  { value: "google_ads", label: "Google Ads" },
+  { value: "facebook", label: "Facebook" },
+  { value: "instagram", label: "Instagram" },
+  { value: "tiktok", label: "TikTok" },
+] as const;
+
+export type PlatformValue = (typeof PLATFORM_OPTIONS)[number]["value"];
+
+export const FORMAT_OPTIONS = [
+  { value: "image", label: "Image" },
+  { value: "carousel", label: "Carousel" },
+  { value: "video", label: "Video" },
+] as const;
+
+export type CreativeFormatValue = (typeof FORMAT_OPTIONS)[number]["value"];
+
+/** Intake form state — maps to campaign / ad workflow fields; copy and assets are filled by automation later. */
 export type CampaignBriefValues = {
   businessName: string;
   contactName: string;
   email: string;
   phone: string;
   website: string;
-  businessType: string;
-  services: string;
-  serviceArea: string;
-  targetCustomer: string;
+  industry: string;
+  location: string;
+  campaignName: string;
   offer: string;
-  goal: CampaignGoalValue;
-  preferredPlatform: PlatformValue;
-  notes: string;
+  cta: string;
+  finalUrl: string;
+  platforms: PlatformValue[];
+  formats: CreativeFormatValue[];
+  creativeBrief: string;
+  designNotes: string;
 };
-
-export const GOAL_OPTIONS = [
-  { value: "more_leads", label: "More Leads" },
-  { value: "more_calls", label: "More Calls" },
-  { value: "more_quotes", label: "More Quote Requests" },
-  { value: "more_bookings", label: "More Bookings" },
-] as const;
-
-export type CampaignGoalValue = (typeof GOAL_OPTIONS)[number]["value"];
-
-export const PLATFORM_OPTIONS = [
-  { value: "google_ads", label: "Google Ads" },
-  { value: "facebook", label: "Facebook" },
-  { value: "instagram", label: "Instagram" },
-  { value: "mixed", label: "Mixed / Not Sure" },
-] as const;
-
-export type PlatformValue = (typeof PLATFORM_OPTIONS)[number]["value"];
-
-const GOAL_TO_DB: Record<CampaignGoalValue, string> = {
-  more_leads: "lead_generation",
-  more_calls: "more_calls",
-  more_quotes: "quote_requests",
-  more_bookings: "bookings",
-};
-
-export function goalLabel(value: CampaignGoalValue): string {
-  return GOAL_OPTIONS.find((g) => g.value === value)?.label ?? value;
-}
 
 export function platformLabel(value: PlatformValue): string {
   return PLATFORM_OPTIONS.find((p) => p.value === value)?.label ?? value;
+}
+
+export function formatLabel(value: CreativeFormatValue): string {
+  return FORMAT_OPTIONS.find((f) => f.value === value)?.label ?? value;
+}
+
+export function platformsSummary(values: PlatformValue[]): string {
+  return values.map(platformLabel).join(", ");
+}
+
+export function formatsSummary(values: CreativeFormatValue[]): string {
+  return values.map(formatLabel).join(", ");
 }
 
 export function buildCampaignBriefNotes(values: CampaignBriefValues): string {
   const lines = [
     `Source: ${LEAD_SOURCE}`,
     `Contact: ${values.contactName.trim()} <${values.email.trim()}> ${values.phone.trim()}`,
-    values.website.trim() ? `Website: ${values.website.trim()}` : null,
-    `Campaign goal: ${goalLabel(values.goal)}`,
-    `Target customer: ${values.targetCustomer.trim()}`,
-    values.notes.trim() ? `Additional notes: ${values.notes.trim()}` : null,
+    values.website.trim() ? `Business website: ${values.website.trim()}` : null,
+    `Landing / final URL: ${values.finalUrl.trim()}`,
+    `Platforms: ${platformsSummary(values.platforms)}`,
+    `Creative formats: ${formatsSummary(values.formats)}`,
+    `Campaign goal (brief): ${values.creativeBrief.trim()}`,
+    values.designNotes.trim() ? `Design notes: ${values.designNotes.trim()}` : null,
   ];
   return lines.filter(Boolean).join("\n");
 }
@@ -69,19 +74,17 @@ export function buildCampaignBriefNotes(values: CampaignBriefValues): string {
 export type CampaignBriefRow = {
   business_name: string;
   campaign_name: string;
+  /** Comma-separated platform keys, e.g. google_ads,facebook */
   platform: string;
   service_area: string;
   landing_page_url: string | null;
-  /** Promotional offer / hook from the form (not the goal). */
   offer: string;
-  /**
-   * Real CTA button copy (e.g. “Book a Free Estimate”). Intake does not collect this yet;
-   * goals belong in `campaign_goal` + notes, not here. Empty string if the column is NOT NULL.
-   */
   cta: string;
   business_type: string;
+  /** Filled later by automation; not collected on intake. */
   core_services: string;
   trust_points: string | null;
+  /** Short client goal text from the intake “creative brief” field. */
   campaign_goal: string;
   status: string;
   notes: string;
@@ -89,19 +92,19 @@ export type CampaignBriefRow = {
 
 export function toCampaignBriefRow(values: CampaignBriefValues): CampaignBriefRow {
   const name = values.businessName.trim();
+  const platforms = [...values.platforms].sort().join(",");
   return {
     business_name: name,
-    campaign_name: `${name} — Campaign brief`,
-    platform: values.preferredPlatform,
-    service_area: values.serviceArea.trim(),
-    landing_page_url: values.website.trim() || null,
+    campaign_name: values.campaignName.trim(),
+    platform: platforms,
+    service_area: values.location.trim(),
+    landing_page_url: values.finalUrl.trim() || null,
     offer: values.offer.trim(),
-    // Avoid misleading goal text in cta; use empty if DB column is NOT NULL without default.
-    cta: "",
-    business_type: values.businessType.trim(),
-    core_services: values.services.trim(),
-    trust_points: values.targetCustomer.trim() || null,
-    campaign_goal: GOAL_TO_DB[values.goal],
+    cta: values.cta.trim(),
+    business_type: values.industry.trim(),
+    core_services: "",
+    trust_points: null,
+    campaign_goal: values.creativeBrief.trim(),
     status: "new",
     notes: buildCampaignBriefNotes(values),
   };
@@ -113,12 +116,14 @@ export const INITIAL_CAMPAIGN_BRIEF_VALUES: CampaignBriefValues = {
   email: "",
   phone: "",
   website: "",
-  businessType: "",
-  services: "",
-  serviceArea: "",
-  targetCustomer: "",
+  industry: "",
+  location: "",
+  campaignName: "",
   offer: "",
-  goal: "more_leads",
-  preferredPlatform: "google_ads",
-  notes: "",
+  cta: "",
+  finalUrl: "",
+  platforms: [],
+  formats: [],
+  creativeBrief: "",
+  designNotes: "",
 };

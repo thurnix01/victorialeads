@@ -3,21 +3,22 @@ import { Button } from "@/components/Button";
 import { supabase } from "@/lib/supabase";
 import {
   CAMPAIGN_BRIEFS_TABLE,
-  GOAL_OPTIONS,
+  FORMAT_OPTIONS,
   INITIAL_CAMPAIGN_BRIEF_VALUES,
   PLATFORM_OPTIONS,
   type CampaignBriefValues,
-  goalLabel,
-  platformLabel,
+  type CreativeFormatValue,
+  type PlatformValue,
+  formatsSummary,
+  platformsSummary,
   toCampaignBriefRow,
 } from "@/lib/campaignBrief";
 import { supabaseErrorMessage } from "@/lib/supabaseErrors";
 
 const STEPS = [
   { id: 1, title: "Business basics", short: "Basics" },
-  { id: 2, title: "Service info", short: "Service" },
-  { id: 3, title: "Campaign info", short: "Campaign" },
-  { id: 4, title: "Review & send", short: "Review" },
+  { id: 2, title: "Campaign inputs", short: "Campaign" },
+  { id: 3, title: "Review & send", short: "Review" },
 ] as const;
 
 function digitsOnly(s: string): string {
@@ -40,6 +41,18 @@ function validWebsite(s: string): boolean {
   }
 }
 
+function validHttpUrl(s: string): boolean {
+  const t = s.trim();
+  if (!t) return false;
+  try {
+    const u = t.includes("://") ? t : `https://${t}`;
+    const parsed = new URL(u);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function validateStep(step: number, v: CampaignBriefValues): Partial<Record<keyof CampaignBriefValues, string>> {
   const e: Partial<Record<keyof CampaignBriefValues, string>> = {};
   if (step === 1) {
@@ -52,13 +65,16 @@ function validateStep(step: number, v: CampaignBriefValues): Partial<Record<keyo
     if (v.website.trim() && !validWebsite(v.website)) e.website = "Enter a valid website or leave blank.";
   }
   if (step === 2) {
-    if (!v.businessType.trim()) e.businessType = "Tell us what kind of business you run.";
-    if (!v.services.trim()) e.services = "List your main services.";
-    if (!v.serviceArea.trim()) e.serviceArea = "Where do you serve customers?";
-    if (!v.targetCustomer.trim()) e.targetCustomer = "Describe who you want more of.";
-  }
-  if (step === 3) {
-    if (!v.offer.trim()) e.offer = "What offer or hook should we highlight?";
+    if (!v.industry.trim()) e.industry = "Add your industry or business type.";
+    if (!v.location.trim()) e.location = "Where do you serve customers?";
+    if (!v.campaignName.trim()) e.campaignName = "Give this campaign a short name.";
+    if (!v.offer.trim()) e.offer = "What’s the main offer or hook?";
+    if (!v.cta.trim()) e.cta = "What should the call to action say?";
+    if (!v.finalUrl.trim()) e.finalUrl = "Add the landing page or final URL for ads.";
+    else if (!validHttpUrl(v.finalUrl)) e.finalUrl = "Enter a valid URL (https://…).";
+    if (!v.platforms.length) e.platforms = "Pick at least one platform.";
+    if (!v.formats.length) e.formats = "Pick at least one creative format.";
+    if (!v.creativeBrief.trim()) e.creativeBrief = "Add a short campaign goal in your own words.";
   }
   return e;
 }
@@ -94,6 +110,15 @@ const inputClass = (error?: string) =>
     error ? "border-rose-300 ring-2 ring-rose-100" : "border-slate-200 focus:ring-2 focus:ring-teal-600/25",
   ].join(" ");
 
+const choiceClass = (checked: boolean, error?: string) =>
+  [
+    "flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition",
+    checked
+      ? "border-teal-600 bg-teal-50/80 text-brand-900"
+      : "border-slate-200 bg-white text-slate-800 hover:border-slate-300",
+    error ? "ring-2 ring-rose-100" : "",
+  ].join(" ");
+
 export function CampaignBriefForm() {
   const [values, setValues] = useState<CampaignBriefValues>(INITIAL_CAMPAIGN_BRIEF_VALUES);
   const [step, setStep] = useState(1);
@@ -104,11 +129,24 @@ export function CampaignBriefForm() {
   const stepErrors = useMemo(() => validateStep(step, values), [step, values]);
   const showErrors = touchedSteps[step] === true;
 
-  const stepValid =
-    step === 4 ? true : Object.keys(validateStep(step, values)).length === 0;
+  const stepValid = step === 3 ? true : Object.keys(validateStep(step, values)).length === 0;
 
   function setField<K extends keyof CampaignBriefValues>(key: K, value: CampaignBriefValues[K]) {
     setValues((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function togglePlatform(p: PlatformValue) {
+    setValues((prev) => ({
+      ...prev,
+      platforms: prev.platforms.includes(p) ? prev.platforms.filter((x) => x !== p) : [...prev.platforms, p],
+    }));
+  }
+
+  function toggleFormat(f: CreativeFormatValue) {
+    setValues((prev) => ({
+      ...prev,
+      formats: prev.formats.includes(f) ? prev.formats.filter((x) => x !== f) : [...prev.formats, f],
+    }));
   }
 
   function markTouched() {
@@ -119,7 +157,7 @@ export function CampaignBriefForm() {
     markTouched();
     const err = validateStep(step, values);
     if (Object.keys(err).length) return;
-    setStep((s) => Math.min(4, s + 1));
+    setStep((s) => Math.min(3, s + 1));
   }
 
   function goBack() {
@@ -128,19 +166,17 @@ export function CampaignBriefForm() {
   }
 
   /**
-   * Only step 4 may send data. Steps 1–3 use inputs inside one <form>; pressing Enter in a field
+   * Only step 3 may send data. Steps 1–2 use inputs inside one <form>; pressing Enter in a field
    * can trigger implicit form submit in browsers—without this guard, that would POST before review.
    */
   async function submitCampaignBrief() {
     setSubmitError("");
-    setTouchedSteps({ 1: true, 2: true, 3: true });
+    setTouchedSteps({ 1: true, 2: true });
     const e1 = validateStep(1, values);
     const e2 = validateStep(2, values);
-    const e3 = validateStep(3, values);
-    if (Object.keys(e1).length || Object.keys(e2).length || Object.keys(e3).length) {
+    if (Object.keys(e1).length || Object.keys(e2).length) {
       if (Object.keys(e1).length) setStep(1);
-      else if (Object.keys(e2).length) setStep(2);
-      else setStep(3);
+      else setStep(2);
       return;
     }
 
@@ -164,7 +200,7 @@ export function CampaignBriefForm() {
 
   function onFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (step !== 4) {
+    if (step !== 3) {
       return;
     }
     void submitCampaignBrief();
@@ -198,6 +234,8 @@ export function CampaignBriefForm() {
   }
 
   const err = (key: keyof CampaignBriefValues) => (showErrors ? stepErrors[key] : undefined);
+  const platformErr = showErrors ? stepErrors.platforms : undefined;
+  const formatErr = showErrors ? stepErrors.formats : undefined;
 
   return (
     <form onSubmit={onFormSubmit} className="space-y-8" noValidate>
@@ -324,74 +362,43 @@ export function CampaignBriefForm() {
           {step === 2 ? (
             <>
               <div>
-                <h2 className="text-lg font-semibold text-brand-900">Service info</h2>
-                <p className="mt-1 text-sm text-slate-600">Help us understand what you do and who you serve.</p>
+                <h2 className="text-lg font-semibold text-brand-900">Campaign inputs</h2>
+                <p className="mt-1 text-sm text-slate-600">
+                  What we’re promoting and where ads should send people. Ad copy and asset workflow stay on our side.
+                </p>
               </div>
               <div className="grid gap-5">
-                <Field label="Business type" id="cbf-businessType" error={err("businessType")}>
+                <Field label="Industry / business type" id="cbf-industry" error={err("industry")}>
                   <input
-                    id="cbf-businessType"
-                    name="businessType"
-                    value={values.businessType}
-                    onChange={(e) => setField("businessType", e.target.value)}
-                    placeholder="e.g., HVAC, plumbing, landscaping, dental"
-                    className={inputClass(err("businessType"))}
+                    id="cbf-industry"
+                    name="industry"
+                    value={values.industry}
+                    onChange={(e) => setField("industry", e.target.value)}
+                    placeholder="e.g., HVAC, plumbing, dental, landscaping"
+                    className={inputClass(err("industry"))}
                   />
                 </Field>
-                <Field
-                  label="Services"
-                  id="cbf-services"
-                  error={err("services")}
-                  hint="Separate with commas — we’ll use this for messaging ideas."
-                >
-                  <textarea
-                    id="cbf-services"
-                    name="services"
-                    value={values.services}
-                    onChange={(e) => setField("services", e.target.value)}
-                    placeholder="e.g., Furnace install, AC tune-ups, 24/7 emergency repairs"
-                    rows={3}
-                    className={[inputClass(err("services")), "resize-y min-h-[88px]"].join(" ")}
-                  />
-                </Field>
-                <Field label="Service area" id="cbf-serviceArea" error={err("serviceArea")}>
+                <Field label="Location / service area" id="cbf-location" error={err("location")}>
                   <input
-                    id="cbf-serviceArea"
-                    name="serviceArea"
-                    value={values.serviceArea}
-                    onChange={(e) => setField("serviceArea", e.target.value)}
+                    id="cbf-location"
+                    name="location"
+                    value={values.location}
+                    onChange={(e) => setField("location", e.target.value)}
                     placeholder="e.g., Greater Victoria, Langford, Sidney"
-                    className={inputClass(err("serviceArea"))}
+                    className={inputClass(err("location"))}
                   />
                 </Field>
-                <Field label="Target customer" id="cbf-targetCustomer" error={err("targetCustomer")}>
-                  <textarea
-                    id="cbf-targetCustomer"
-                    name="targetCustomer"
-                    value={values.targetCustomer}
-                    onChange={(e) => setField("targetCustomer", e.target.value)}
-                    placeholder="e.g., Homeowners 40+, property managers, small commercial buildings"
-                    rows={3}
-                    className={[inputClass(err("targetCustomer")), "resize-y min-h-[88px]"].join(" ")}
+                <Field label="Campaign name" id="cbf-campaignName" error={err("campaignName")}>
+                  <input
+                    id="cbf-campaignName"
+                    name="campaignName"
+                    value={values.campaignName}
+                    onChange={(e) => setField("campaignName", e.target.value)}
+                    placeholder="e.g., Spring tune-up push"
+                    className={inputClass(err("campaignName"))}
                   />
                 </Field>
-              </div>
-            </>
-          ) : null}
-
-          {step === 3 ? (
-            <>
-              <div>
-                <h2 className="text-lg font-semibold text-brand-900">Campaign info</h2>
-                <p className="mt-1 text-sm text-slate-600">What we should promote and what “win” looks like.</p>
-              </div>
-              <div className="grid gap-5">
-                <Field
-                  label="Offer"
-                  id="cbf-offer"
-                  error={err("offer")}
-                  hint="What should people get when they respond? (e.g. free estimate, seasonal discount)"
-                >
+                <Field label="Main offer" id="cbf-offer" error={err("offer")} hint="What should people get when they respond?">
                   <textarea
                     id="cbf-offer"
                     name="offer"
@@ -402,58 +409,122 @@ export function CampaignBriefForm() {
                     className={[inputClass(err("offer")), "resize-y min-h-[88px]"].join(" ")}
                   />
                 </Field>
-                <Field label="Goal" id="cbf-goal" hint="Pick the outcome you care about most right now.">
-                  <select
-                    id="cbf-goal"
-                    name="goal"
-                    value={values.goal}
-                    onChange={(e) => setField("goal", e.target.value as CampaignBriefValues["goal"])}
-                    className={inputClass()}
-                  >
-                    {GOAL_OPTIONS.map((g) => (
-                      <option key={g.value} value={g.value}>
-                        {g.label}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-                <Field label="Preferred platform" id="cbf-platform">
-                  <select
-                    id="cbf-platform"
-                    name="preferredPlatform"
-                    value={values.preferredPlatform}
-                    onChange={(e) =>
-                      setField("preferredPlatform", e.target.value as CampaignBriefValues["preferredPlatform"])
-                    }
-                    className={inputClass()}
-                  >
-                    {PLATFORM_OPTIONS.map((p) => (
-                      <option key={p.value} value={p.value}>
-                        {p.label}
-                      </option>
-                    ))}
-                  </select>
+                <Field label="Call to action" id="cbf-cta" error={err("cta")} hint="Button or line you want on the ads.">
+                  <input
+                    id="cbf-cta"
+                    name="cta"
+                    value={values.cta}
+                    onChange={(e) => setField("cta", e.target.value)}
+                    placeholder="e.g., Book a free estimate"
+                    className={inputClass(err("cta"))}
+                  />
                 </Field>
                 <Field
-                  label="Notes"
-                  id="cbf-notes"
-                  hint="Optional — links to assets, competitors you like, timing, or anything else."
+                  label="Landing page / final URL"
+                  id="cbf-finalUrl"
+                  error={err("finalUrl")}
+                  hint="Where clicks from ads should land (can differ from your main website)."
+                >
+                  <input
+                    id="cbf-finalUrl"
+                    name="finalUrl"
+                    type="url"
+                    value={values.finalUrl}
+                    onChange={(e) => setField("finalUrl", e.target.value)}
+                    placeholder="https://…"
+                    autoComplete="url"
+                    className={inputClass(err("finalUrl"))}
+                  />
+                </Field>
+
+                <fieldset className="space-y-2">
+                  <legend className="text-xs font-semibold text-slate-700">Platforms wanted</legend>
+                  <p className="text-xs text-slate-500">Select all that apply.</p>
+                  <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                    {PLATFORM_OPTIONS.map((p) => {
+                      const checked = values.platforms.includes(p.value);
+                      return (
+                        <label key={p.value} className={choiceClass(checked, platformErr)}>
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-slate-300 text-teal-700 focus:ring-teal-600"
+                            checked={checked}
+                            onChange={() => togglePlatform(p.value)}
+                          />
+                          <span>{p.label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {platformErr ? (
+                    <p className="text-xs font-medium text-rose-600" role="alert">
+                      {platformErr}
+                    </p>
+                  ) : null}
+                </fieldset>
+
+                <fieldset className="space-y-2">
+                  <legend className="text-xs font-semibold text-slate-700">Creative format wanted</legend>
+                  <p className="text-xs text-slate-500">Image, carousel, and/or video.</p>
+                  <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                    {FORMAT_OPTIONS.map((f) => {
+                      const checked = values.formats.includes(f.value);
+                      return (
+                        <label key={f.value} className={choiceClass(checked, formatErr)}>
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-slate-300 text-teal-700 focus:ring-teal-600"
+                            checked={checked}
+                            onChange={() => toggleFormat(f.value)}
+                          />
+                          <span>{f.label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {formatErr ? (
+                    <p className="text-xs font-medium text-rose-600" role="alert">
+                      {formatErr}
+                    </p>
+                  ) : null}
+                </fieldset>
+
+                <Field
+                  label="Short campaign goal"
+                  id="cbf-creativeBrief"
+                  error={err("creativeBrief")}
+                  hint="In a sentence or two — what does “win” look like for this campaign?"
                 >
                   <textarea
-                    id="cbf-notes"
-                    name="notes"
-                    value={values.notes}
-                    onChange={(e) => setField("notes", e.target.value)}
-                    placeholder="Anything else we should know?"
-                    rows={4}
-                    className={[inputClass(), "resize-y min-h-[100px]"].join(" ")}
+                    id="cbf-creativeBrief"
+                    name="creativeBrief"
+                    value={values.creativeBrief}
+                    onChange={(e) => setField("creativeBrief", e.target.value)}
+                    placeholder="e.g., Fill the calendar for April installs from homeowners south of the bridge"
+                    rows={3}
+                    className={[inputClass(err("creativeBrief")), "resize-y min-h-[88px]"].join(" ")}
+                  />
+                </Field>
+                <Field
+                  label="Optional design notes"
+                  id="cbf-designNotes"
+                  hint="Brand colours, fonts, assets, competitors you like, or timing."
+                >
+                  <textarea
+                    id="cbf-designNotes"
+                    name="designNotes"
+                    value={values.designNotes}
+                    onChange={(e) => setField("designNotes", e.target.value)}
+                    placeholder="Anything the design team should know?"
+                    rows={3}
+                    className={[inputClass(), "resize-y min-h-[88px]"].join(" ")}
                   />
                 </Field>
               </div>
             </>
           ) : null}
 
-          {step === 4 ? (
+          {step === 3 ? (
             <>
               <div>
                 <h2 className="text-lg font-semibold text-brand-900">Review & send</h2>
@@ -466,14 +537,16 @@ export function CampaignBriefForm() {
                 <ReviewRow label="Business" value={values.businessName} />
                 <ReviewRow label="Contact" value={`${values.contactName} · ${values.email} · ${values.phone}`} />
                 <ReviewRow label="Website" value={values.website.trim() || "—"} />
-                <ReviewRow label="Business type" value={values.businessType} />
-                <ReviewRow label="Services" value={values.services} />
-                <ReviewRow label="Service area" value={values.serviceArea} />
-                <ReviewRow label="Target customer" value={values.targetCustomer} />
+                <ReviewRow label="Industry / type" value={values.industry} />
+                <ReviewRow label="Location / area" value={values.location} />
+                <ReviewRow label="Campaign name" value={values.campaignName} />
                 <ReviewRow label="Offer" value={values.offer} />
-                <ReviewRow label="Goal" value={goalLabel(values.goal)} />
-                <ReviewRow label="Platform" value={platformLabel(values.preferredPlatform)} />
-                <ReviewRow label="Notes" value={values.notes.trim() || "—"} />
+                <ReviewRow label="Call to action" value={values.cta} />
+                <ReviewRow label="Landing / final URL" value={values.finalUrl} />
+                <ReviewRow label="Platforms" value={platformsSummary(values.platforms)} />
+                <ReviewRow label="Formats" value={formatsSummary(values.formats)} />
+                <ReviewRow label="Campaign goal" value={values.creativeBrief} />
+                <ReviewRow label="Design notes" value={values.designNotes.trim() || "—"} />
               </dl>
             </>
           ) : null}
@@ -494,7 +567,7 @@ export function CampaignBriefForm() {
           {submitError ? (
             <p className="max-w-full break-words text-left text-xs font-medium text-rose-600 sm:max-w-md">{submitError}</p>
           ) : null}
-          {step < 4 ? (
+          {step < 3 ? (
             <Button type="button" onClick={goNext} disabled={!stepValid}>
               Next
             </Button>
