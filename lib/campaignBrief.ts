@@ -1,106 +1,94 @@
-/** Supabase public.campaign_briefs (intake) — align with your table; adjust env if the table name differs. */
+/**
+ * Campaign brief intake — maps form state → Supabase `campaign_briefs` row shape.
+ *
+ * Table name: set `NEXT_PUBLIC_SUPABASE_CAMPAIGN_BRIEFS_TABLE` or defaults to `campaign_briefs`.
+ *
+ * If your Postgres columns differ (e.g. `email` instead of `contact_email`), rename columns
+ * in Supabase or adjust `toCampaignBriefInsert` below.
+ */
+
 export const CAMPAIGN_BRIEFS_TABLE =
   process.env.NEXT_PUBLIC_SUPABASE_CAMPAIGN_BRIEFS_TABLE || "campaign_briefs";
 
-export const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca/start-your-campaign";
-
-/**
- * Values must match Postgres `campaign_briefs_platform_check` on your Supabase table.
- * (TikTok / mixed / etc. are not valid until you extend that constraint or use `notes`.)
- */
-export const PLATFORM_OPTIONS = [
-  { value: "google_ads", label: "Google Ads" },
-  { value: "facebook", label: "Facebook" },
-  { value: "instagram", label: "Instagram" },
-] as const;
-
-export type PlatformValue = (typeof PLATFORM_OPTIONS)[number]["value"];
-
-export function platformLabel(value: PlatformValue): string {
-  return PLATFORM_OPTIONS.find((p) => p.value === value)?.label ?? value;
-}
-
-/** Client intake only — campaign copy and ad status live in your generated / downstream tables. */
-export type CampaignBriefValues = {
+/** Form state (camelCase) — easy to bind in React. */
+export type CampaignBriefFormValues = {
   businessName: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  website: string;
   businessType: string;
+  contactName: string;
+  contactEmail: string;
+  phone: string;
   serviceArea: string;
   coreServices: string;
   offer: string;
   trustPoints: string;
   landingPageUrl: string;
-  campaignGoal: string;
+  campaignGoal: CampaignGoalSlug;
   cta: string;
-  platform: PlatformValue;
   notes: string;
 };
 
-export function buildCampaignBriefNotes(values: CampaignBriefValues): string {
-  const extra = values.notes.trim();
-  if (!extra) return `Source: ${LEAD_SOURCE}`;
-  return `Source: ${LEAD_SOURCE}\n\n${extra}`;
+export const CAMPAIGN_GOAL_OPTIONS = [
+  { value: "more_leads", label: "More leads" },
+  { value: "more_calls", label: "More calls" },
+  { value: "more_booked_jobs", label: "More booked jobs" },
+  { value: "brand_awareness", label: "Brand awareness" },
+] as const;
+
+export type CampaignGoalSlug = (typeof CAMPAIGN_GOAL_OPTIONS)[number]["value"];
+
+export function campaignGoalLabel(slug: CampaignGoalSlug): string {
+  return CAMPAIGN_GOAL_OPTIONS.find((o) => o.value === slug)?.label ?? slug;
 }
 
-/** Row for Supabase insert — snake_case matches intake columns only. */
-export type CampaignBriefRow = {
+/** Payload keys match typical `campaign_briefs` columns (snake_case). */
+export type CampaignBriefInsert = {
   business_name: string;
-  contact_name: string;
-  email: string;
-  phone: string;
-  website: string | null;
   business_type: string;
+  contact_name: string;
+  contact_email: string;
+  phone: string | null;
   service_area: string;
   core_services: string;
-  offer: string;
+  offer: string | null;
   trust_points: string | null;
   landing_page_url: string | null;
-  campaign_goal: string;
+  campaign_goal: CampaignGoalSlug;
   cta: string;
-  platform: string;
-  notes: string;
-  /** Workflow default for `campaign_briefs` (not collected on the form). */
-  status: string;
+  notes: string | null;
+  status: "submitted";
 };
 
-export function toCampaignBriefRow(values: CampaignBriefValues): CampaignBriefRow {
+export function toCampaignBriefInsert(values: CampaignBriefFormValues): CampaignBriefInsert {
   return {
     business_name: values.businessName.trim(),
-    contact_name: values.contactName.trim(),
-    email: values.email.trim(),
-    phone: values.phone.trim(),
-    website: values.website.trim() || null,
     business_type: values.businessType.trim(),
+    contact_name: values.contactName.trim(),
+    contact_email: values.contactEmail.trim(),
+    phone: values.phone.trim() || null,
     service_area: values.serviceArea.trim(),
     core_services: values.coreServices.trim(),
-    offer: values.offer.trim(),
+    offer: values.offer.trim() || null,
     trust_points: values.trustPoints.trim() || null,
     landing_page_url: values.landingPageUrl.trim() || null,
-    campaign_goal: values.campaignGoal.trim(),
+    campaign_goal: values.campaignGoal,
     cta: values.cta.trim(),
-    platform: values.platform,
-    notes: buildCampaignBriefNotes(values),
-    status: "new",
+    notes: values.notes.trim() || null,
+    status: "submitted",
   };
 }
 
-export const INITIAL_CAMPAIGN_BRIEF_VALUES: CampaignBriefValues = {
+export const INITIAL_CAMPAIGN_BRIEF_VALUES: CampaignBriefFormValues = {
   businessName: "",
-  contactName: "",
-  email: "",
-  phone: "",
-  website: "",
   businessType: "",
+  contactName: "",
+  contactEmail: "",
+  phone: "",
   serviceArea: "",
   coreServices: "",
   offer: "",
   trustPoints: "",
   landingPageUrl: "",
-  campaignGoal: "",
+  campaignGoal: "more_leads",
   cta: "",
-  platform: "google_ads",
   notes: "",
 };
