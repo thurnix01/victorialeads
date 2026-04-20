@@ -139,7 +139,16 @@ export function CampaignBriefForm() {
   function goNext() {
     markTouched();
     if (Object.keys(validateStep(step, values)).length) return;
-    setStep((s) => Math.min(5, s + 1));
+    setStep((s) => {
+      const next = Math.min(5, s + 1);
+      // Avoid implicit form submit / double-activation: leaving "Next" focused can fire Enter
+      // against a newly mounted "Submit" in the same layout slot on some browsers.
+      if (next === 5 && typeof document !== "undefined") {
+        const el = document.activeElement;
+        if (el instanceof HTMLElement) el.blur();
+      }
+      return next;
+    });
     setSubmitError("");
   }
 
@@ -186,10 +195,9 @@ export function CampaignBriefForm() {
     }
   }
 
+  /** Never submit via native <form> (Enter key, double-click, or default button). Only explicit click. */
   function onFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (step !== 5) return;
-    void handleSubmit();
   }
 
   function dismissSuccess() {
@@ -485,11 +493,11 @@ export function CampaignBriefForm() {
             <p className="max-w-full text-sm font-medium text-rose-600 sm:max-w-md sm:text-right">{submitError}</p>
           ) : null}
           {step < 5 ? (
-            <Button type="button" onClick={goNext} disabled={!stepValid}>
+            <Button key="nav-next" type="button" onClick={goNext} disabled={!stepValid}>
               Next
             </Button>
           ) : (
-            <Button type="submit" disabled={isSubmitting}>
+            <Button key="nav-submit" type="button" disabled={isSubmitting} onClick={() => void handleSubmit()}>
               {isSubmitting ? "Submitting…" : "Submit brief"}
             </Button>
           )}
