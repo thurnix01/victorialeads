@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/Button";
 import { supabase } from "@/lib/supabase";
+import { supabaseErrorMessage } from "@/lib/supabaseErrors";
 import { onDemoLeadSuccess } from "@/lib/tracking";
 
 const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca";
@@ -109,7 +110,7 @@ export function LeadForm({ compact = false }) {
       setStatus("success");
     } catch (error) {
       setStatus("idle");
-      setSubmitError(error.message || "Something went wrong while saving your request.");
+      setSubmitError(supabaseErrorMessage(error, "Something went wrong while saving your request."));
     }
   }
 
