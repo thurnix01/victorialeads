@@ -21,6 +21,7 @@ import {
   type CampaignGoalSlug,
 } from "@/lib/campaignBrief";
 import { supabaseErrorMessage } from "@/lib/supabaseErrors";
+import { onCampaignBriefSuccess } from "@/lib/tracking";
 
 const STEPS = [
   { id: 1, title: "Business", short: "Biz" },
@@ -184,6 +185,7 @@ export function CampaignBriefForm() {
     try {
       const { error } = await supabase.from(CAMPAIGN_BRIEFS_TABLE).insert([row]);
       if (error) throw error;
+      void onCampaignBriefSuccess(values, row);
       setIsSuccess(true);
       setValues(INITIAL_CAMPAIGN_BRIEF_VALUES);
       setStep(1);

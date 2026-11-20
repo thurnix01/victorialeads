@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/Button";
 import { supabase } from "@/lib/supabase";
+import { onDemoLeadSuccess } from "@/lib/tracking";
 
 const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca";
 const LEAD_CLIENT_EMAIL = process.env.NEXT_PUBLIC_CLIENT_EMAIL || "info@victorialeads.ca";
@@ -99,7 +100,12 @@ export function LeadForm({ compact = false }) {
       ]);
   
       if (error) throw error;
-  
+
+      void onDemoLeadSuccess({
+        lead_source: LEAD_SOURCE,
+        business_name: values.businessName.trim(),
+      });
+
       setStatus("success");
     } catch (error) {
       setStatus("idle");

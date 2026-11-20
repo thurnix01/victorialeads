@@ -8,9 +8,10 @@ import { Container } from "@/components/Container";
 export function Hero() {
   return (
     <section className="relative isolate min-h-[min(92vh,920px)] overflow-hidden bg-ink text-white">
+      {/* Swap `/public/hero-victoria.jpg` for your own Victoria job-site / brand photography when ready. */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url(/hero-trades.jpg)" }}
+        style={{ backgroundImage: "url(/hero-victoria.jpg)" }}
         aria-hidden
       />
       <div
