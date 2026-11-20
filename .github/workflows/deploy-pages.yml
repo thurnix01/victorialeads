@@ -41,6 +41,15 @@ jobs:
       - name: Build static export
         run: npm run build
 
+      - name: Verify SEO artifacts
+        run: |
+          test -f out/index.html
+          test -f out/sitemap.xml
+          test -f out/robots.txt
+          test -f out/og-image.jpg
+          grep -q 'google-site-verification' out/index.html
+          grep -q 'GTM-P2L473TN' out/index.html
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

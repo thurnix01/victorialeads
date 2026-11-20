@@ -1,21 +1,15 @@
-import Head from "next/head";
+import { Seo } from "@/components/Seo";
 import { CampaignBriefForm } from "@/components/CampaignBriefForm";
 import { Container } from "@/components/Container";
 
-const title = "Start your campaign | Victoria Leads AI";
+const title = "Start your campaign | Victoria Leads";
 const description =
-  "Submit a short campaign brief for your Victoria-area trade or service business. Victoria Leads AI helps with ads, creative, lead capture, and follow-up automation.";
+  "Submit a short campaign brief for your Victoria-area trade or service business. Victoria Leads helps with ads, creative, lead capture, and follow-up automation.";
 
 export default function StartYourCampaignPage() {
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-      </Head>
+      <Seo title={title} description={description} path="/start-your-campaign/" />
 
       <div className="min-h-screen bg-paper">
         <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/95 backdrop-blur-md">

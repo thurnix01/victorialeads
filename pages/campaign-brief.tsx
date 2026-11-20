@@ -1,4 +1,4 @@
-import Head from "next/head";
+import { Seo } from "@/components/Seo";
 import { CampaignBriefForm } from "@/components/CampaignBriefForm";
 import { Container } from "@/components/Container";
 
@@ -10,13 +10,7 @@ const description =
 export default function CampaignBriefPage() {
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-      </Head>
+      <Seo title={title} description={description} path="/campaign-brief/" />
 
       <div className="min-h-screen bg-paper">
         <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/95 backdrop-blur-md">

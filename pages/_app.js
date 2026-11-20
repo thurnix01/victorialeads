@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { Syne, IBM_Plex_Sans } from "next/font/google";
+import { GoogleTagManager } from "@/components/GoogleTagManager";
 
 /** Display: Syne — geometric, less “default SaaS” than Inter. Body: IBM Plex Sans — industrial clarity. */
 const display = Syne({
@@ -19,6 +20,7 @@ const sans = IBM_Plex_Sans({
 export default function App({ Component, pageProps }) {
   return (
     <div className={`${display.variable} ${sans.variable} font-sans`}>
+      <GoogleTagManager />
       <Component {...pageProps} />
     </div>
   );
