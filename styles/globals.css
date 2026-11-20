@@ -2,14 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ink: #0d1520;
+  --ink-soft: #1a2836;
+  --fog: #e8eef2;
+  --paper: #f5f8fa;
+  --sea: #1a6b62;
+  --signal: #c9851a;
+  --line: #c5d0d8;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-paper text-ink antialiased;
+  font-feature-settings: "ss01" on, "kern" on;
 }
 
 ::selection {
-  @apply bg-teal-700 text-white;
+  background: #1a6b62;
+  color: #fff;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }

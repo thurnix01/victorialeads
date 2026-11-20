@@ -39,7 +39,7 @@ function Field({ label, name, value, onChange, placeholder, error, type = "text"
         placeholder={placeholder}
         className={[
           "mt-2 w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition",
-          error ? "border-rose-300 ring-2 ring-rose-100" : "border-slate-200 focus:ring-2 focus:ring-teal-600/25",
+          error ? "border-rose-300 ring-2 ring-rose-100" : "border-ink/15 focus:ring-2 focus:ring-sea/25",
         ].join(" ")}
         aria-invalid={error ? "true" : "false"}
         aria-describedby={error ? `${id}-error` : undefined}

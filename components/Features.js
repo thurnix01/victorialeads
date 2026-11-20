@@ -1,46 +1,46 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Container } from "@/components/Container";
-import { SectionHeading } from "@/components/SectionHeading";
-import { CheckIcon } from "@/components/icons";
 
-const PACKAGE_ITEMS = [
-  "Lead capture forms on client websites or landing pages",
-  "Instant lead notifications",
-  "Automated AI-powered email replies",
-  "Automated follow-up sequences",
-  "Lead tracking inside Supabase",
-  "AI-generated Google Ads and social ad copy",
-  "Figma-based ad creative production",
-  "Campaign-ready assets for Google Ads and Meta",
-  "Analytics tracking and performance review",
-  "Ongoing optimization for better revenue results",
+const STACK = [
+  { name: "Lead capture & notifications", value: "Included" },
+  { name: "AI email replies + follow-up sequences", value: "Included" },
+  { name: "Supabase lead tracking", value: "Included" },
+  { name: "AI ad copy (Google & Meta)", value: "Included" },
+  { name: "Figma ad creative production", value: "Included" },
+  { name: "Campaign-ready assets", value: "Included" },
+  { name: "Analytics & performance review", value: "Included" },
+  { name: "Ongoing optimization", value: "Included" },
 ];
-
-function Item({ text }) {
-  return (
-    <div className="flex gap-3 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm shadow-slate-900/5 transition hover:border-teal-600/25 hover:shadow-md">
-      <div className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-teal-50 ring-1 ring-teal-600/20">
-        <CheckIcon className="text-teal-700" />
-      </div>
-      <p className="text-sm font-medium leading-snug text-slate-700">{text}</p>
-    </div>
-  );
-}
 
 export function Features() {
   return (
-    <AnimatedSection id="features" className="scroll-mt-24 bg-slate-100/80 py-16 sm:py-20">
+    <AnimatedSection id="features" className="scroll-mt-24 border-y border-ink/10 bg-paper py-20 sm:py-28">
       <Container>
-        <SectionHeading
-          eyebrow="What it includes"
-          title="Automated Lead Generation & Revenue Builder for Local Businesses"
-          subtitle="These deliverables work together so you generate more leads, improve follow-up, and tie marketing to measurable revenue."
-        />
+        <div className="grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">What’s included</p>
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+              The full stack—clearly listed.
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-ink/65">
+              No mystery modules. Everything below is part of the monthly Victoria Builder package. Ad spend is paid
+              directly to Google or Meta.
+            </p>
+          </div>
 
-        <div className="mt-10 grid gap-3 sm:grid-cols-2">
-          {PACKAGE_ITEMS.map((text) => (
-            <Item key={text} text={text} />
-          ))}
+          <div className="lg:col-span-7">
+            <ul className="border-t border-ink/15">
+              {STACK.map((item) => (
+                <li
+                  key={item.name}
+                  className="flex items-baseline justify-between gap-6 border-b border-ink/15 py-4"
+                >
+                  <span className="text-sm font-medium text-ink sm:text-base">{item.name}</span>
+                  <span className="shrink-0 text-xs font-semibold uppercase tracking-wider text-sea">{item.value}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </Container>
     </AnimatedSection>

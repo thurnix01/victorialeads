@@ -11,9 +11,9 @@ import { FinalCTA } from "@/components/FinalCTA";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
-  const title = "Victoria Leads AI | Automated Lead Generation for Local Trades | Victoria, BC";
+  const title = "Victoria Leads | Booked jobs for local trades | Victoria, BC";
   const description =
-    "Victoria Leads AI helps local trades and service-based businesses in Victoria, BC and surrounding areas generate more leads, improve follow-up, and turn marketing into measurable revenue through automated systems, ad creative, campaign support, and conversion-focused customer workflows.";
+    "Done-for-you lead capture, AI follow-up, and campaign creative for trades and service businesses in Victoria, BC. One monthly Revenue Builder system—not another DIY course.";
 
   return (
     <>
@@ -25,20 +25,18 @@ export default function Home() {
         <meta property="og:description" content={description} />
       </Head>
 
-      <div id="top" className="min-h-screen">
+      <div id="top" className="min-h-screen bg-paper">
         <Header />
-
         <main>
           <Hero />
-          <FinalCTA />
           <Problem />
-          <Solution />
           <HowItWorks />
+          <Solution />
           <Features />
           <Testimonials />
           <Pricing />
+          <FinalCTA />
         </main>
-
         <Footer />
       </div>
     </>

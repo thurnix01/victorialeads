@@ -1,13 +1,14 @@
 export function Button({ as: Tag = "button", variant = "primary", className = "", ...props }) {
   const base =
-    "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600/30 disabled:opacity-60 disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center rounded-md px-5 py-3 text-sm font-semibold tracking-wide transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sea/40 disabled:opacity-60 disabled:cursor-not-allowed";
 
   const styles = {
-    primary: "bg-teal-700 text-white shadow-md shadow-teal-900/10 hover:bg-teal-800",
-    secondary: "bg-white text-brand-900 ring-1 ring-slate-200/90 shadow-sm hover:bg-teal-50/60 hover:ring-teal-200/80",
-    ghost: "bg-transparent text-brand-900 hover:bg-slate-100",
+    primary: "bg-sea text-white hover:bg-sea-bright",
+    secondary: "bg-transparent text-ink ring-1 ring-ink/20 hover:bg-ink hover:text-white hover:ring-ink",
+    light: "bg-white text-ink hover:bg-fog",
+    ghost: "bg-transparent text-ink/80 hover:text-ink hover:bg-fog",
+    signal: "bg-signal text-ink hover:brightness-110",
   };
 
   return <Tag className={[base, styles[variant] || styles.primary, className].join(" ")} {...props} />;
 }
-

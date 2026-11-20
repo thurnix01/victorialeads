@@ -1,65 +1,48 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Container } from "@/components/Container";
-import { SectionHeading } from "@/components/SectionHeading";
-import { StarIcon } from "@/components/icons";
 
-function Stars() {
-  return (
-    <div className="flex items-center gap-1 text-amber-500" aria-label="5 out of 5 stars">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <StarIcon key={i} />
-      ))}
-    </div>
-  );
-}
-
-function Quote({ name, company, quote, result }) {
-  return (
-    <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm shadow-slate-900/5">
-      <Stars />
-      <p className="mt-4 text-sm leading-relaxed text-slate-700">“{quote}”</p>
-      <div className="mt-5 flex items-center justify-between gap-4">
-        <div>
-          <div className="text-sm font-semibold text-brand-900">{name}</div>
-          <div className="text-xs text-slate-500">{company}</div>
-        </div>
-        <div className="rounded-xl bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-800 ring-1 ring-teal-600/15">
-          {result}
-        </div>
-      </div>
-    </div>
-  );
-}
+/** Process proof — honest until real client quotes exist. Avoids fake star testimonials. */
+const MILESTONES = [
+  {
+    label: "Week 1",
+    title: "Brief locked",
+    body: "Offer, area, CTA, and landing URL confirmed. Tracking and notifications wired.",
+  },
+  {
+    label: "Week 1–2",
+    title: "System live",
+    body: "Capture, AI follow-up, and creative assets ready. Campaigns can go live when you’re ready.",
+  },
+  {
+    label: "Ongoing",
+    title: "Numbers you can discuss",
+    body: "Lead volume, cost per lead, and booked outcomes reviewed so spend stays tied to revenue.",
+  },
+];
 
 export function Testimonials() {
   return (
-    <AnimatedSection id="proof" className="scroll-mt-24 py-16 sm:py-20">
+    <AnimatedSection id="proof" className="scroll-mt-24 bg-fog py-20 sm:py-28">
       <Container>
-        <SectionHeading
-          eyebrow="Results"
-          title="Local service businesses thrive on predictable leads"
-          subtitle="Illustrative examples—replace with your real client stories as you collect them."
-        />
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">What to expect</p>
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            Proof is booked jobs—not a fake dashboard.
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-ink/65">
+            We’re building Victoria-area case studies the honest way. Until then, here’s the delivery rhythm you’ll
+            actually feel.
+          </p>
+        </div>
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
-          <Quote
-            name="Mike R."
-            company="Victoria-area contractor"
-            quote="We went from uneven weeks to consistent inbound leads. Follow-up is easier when the system qualifies people before they reach us."
-            result="34 leads / 30 days"
-          />
-          <Quote
-            name="Sarah T."
-            company="Westshore trade services"
-            quote="The pages and messaging are clear. We’re booking more estimates without chasing cold traffic that was never going to buy."
-            result="$22 CPL"
-          />
-          <Quote
-            name="Jordan K."
-            company="Saanich home services"
-            quote="Setup was fast. We finally have a pipeline we can talk about with numbers—not just gut feel."
-            result="+28% conv."
-          />
+        <div className="mt-12 grid gap-8 border-t border-ink/15 pt-10 md:grid-cols-3">
+          {MILESTONES.map((m) => (
+            <div key={m.label}>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-signal">{m.label}</p>
+              <h3 className="mt-3 font-display text-xl font-bold text-ink">{m.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink/60">{m.body}</p>
+            </div>
+          ))}
         </div>
       </Container>
     </AnimatedSection>

@@ -2,9 +2,9 @@ import Head from "next/head";
 import { CampaignBriefForm } from "@/components/CampaignBriefForm";
 import { Container } from "@/components/Container";
 
-const title = "Campaign brief | Victoria Leads AI";
+const title = "Campaign brief | Victoria Leads";
 const description =
-  "Submit a campaign brief for your Victoria-area trade or service business. Victoria Leads AI helps with ads, creative, and lead automation.";
+  "Submit a campaign brief for your Victoria-area trade or service business. Victoria Leads helps with ads, creative, and lead automation.";
 
 /** Same intake as `/start-your-campaign`, on a short URL you can share or link from docs. */
 export default function CampaignBriefPage() {
@@ -18,19 +18,19 @@ export default function CampaignBriefPage() {
         <meta property="og:description" content={description} />
       </Head>
 
-      <div className="min-h-screen bg-hero-mesh">
-        <header className="sticky top-0 z-50 border-b border-slate-200/90 bg-white/85 backdrop-blur-md">
+      <div className="min-h-screen bg-paper">
+        <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/95 backdrop-blur-md">
           <Container className="flex h-16 items-center justify-between">
-            <a href="/" className="flex items-center gap-2.5">
-              <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-teal-600 to-brand-900 text-xs font-bold tracking-tight text-white shadow-md shadow-teal-900/15">
+            <a href="/" className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center bg-ink text-[11px] font-bold tracking-[0.12em] text-white">
                 VL
-              </div>
+              </span>
               <div className="leading-tight">
-                <div className="text-sm font-semibold text-brand-900">Victoria Leads AI</div>
-                <div className="text-xs text-slate-500">Campaign brief</div>
+                <div className="font-display text-base font-bold text-ink">Victoria Leads</div>
+                <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink/45">Campaign brief</div>
               </div>
             </a>
-            <a href="/" className="text-sm font-medium text-slate-600 transition hover:text-brand-900">
+            <a href="/" className="text-sm font-medium text-ink/60 transition hover:text-ink">
               Back to home
             </a>
           </Container>
@@ -39,9 +39,9 @@ export default function CampaignBriefPage() {
         <main>
           <Container className="py-12 sm:py-16">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-teal-800">Client intake</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-brand-900 sm:text-4xl">Campaign brief</h1>
-              <p className="mt-4 text-base text-slate-600 sm:text-lg">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">Client intake</p>
+              <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">Campaign brief</h1>
+              <p className="mt-4 text-base text-ink/65 sm:text-lg">
                 Tell us about your business and what you want this campaign to achieve. It only takes a few minutes.
               </p>
             </div>

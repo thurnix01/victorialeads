@@ -2,47 +2,37 @@ import { Container } from "@/components/Container";
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-200/90 bg-white py-10">
+    <footer className="border-t border-ink/10 bg-paper py-12">
       <Container>
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <div className="text-sm font-semibold text-brand-900">Victoria Leads AI</div>
-            <div className="mt-1 text-xs text-slate-500">
-              Local trades &amp; service businesses • Victoria, BC &amp; surrounding areas
-            </div>
+            <div className="font-display text-lg font-bold text-ink">Victoria Leads</div>
+            <p className="mt-2 max-w-sm text-sm leading-relaxed text-ink/55">
+              Automated lead generation &amp; revenue systems for trades and service businesses in Victoria, BC and
+              surrounding areas.
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm">
-            <a href="#how" className="text-slate-600 transition hover:text-brand-900">
+          <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm">
+            <a href="#how" className="text-ink/60 transition hover:text-ink">
               How it works
             </a>
-            <a href="#features" className="text-slate-600 transition hover:text-brand-900">
+            <a href="#features" className="text-ink/60 transition hover:text-ink">
               What’s included
             </a>
-            <a href="#pricing" className="text-slate-600 transition hover:text-brand-900">
+            <a href="#pricing" className="text-ink/60 transition hover:text-ink">
               Pricing
             </a>
-            <a href="mailto:info@victorialeads.ca" className="text-slate-600 transition hover:text-brand-900">
+            <a href="/start-your-campaign/" className="text-ink/60 transition hover:text-ink">
+              Campaign brief
+            </a>
+            <a href="mailto:info@victorialeads.ca" className="text-ink/60 transition hover:text-ink">
               info@victorialeads.ca
             </a>
           </div>
         </div>
 
-        <div className="mt-8 rounded-2xl border border-slate-200/90 bg-slate-50/90 p-4 sm:p-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-slate-700">Questions about automation, creative, or campaign support? We’re here to help.</p>
-            <a
-              href="mailto:info@victorialeads.ca?subject=Question%20about%20Victoria%20Leads%20AI"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-teal-900/15 transition hover:bg-teal-800"
-            >
-              Get in touch
-            </a>
-          </div>
-        </div>
-
-        <div className="mt-8 text-xs text-slate-500">
+        <div className="mt-10 border-t border-ink/10 pt-6 text-xs text-ink/40">
           © {new Date().getFullYear()} Victoria Leads AI. All rights reserved.
         </div>
       </Container>

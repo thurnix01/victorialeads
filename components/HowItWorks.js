@@ -1,54 +1,58 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Container } from "@/components/Container";
 
-function Step({ number, title, body }) {
-  return (
-    <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm shadow-slate-900/5">
-      <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-teal-600 to-brand-900 text-white shadow-md shadow-teal-900/20">
-          <span className="text-sm font-semibold">{number}</span>
-        </div>
-        <div className="text-sm font-semibold text-brand-900">{title}</div>
-      </div>
-      <p className="mt-3 text-sm leading-relaxed text-slate-600">{body}</p>
-    </div>
-  );
-}
+/** Four-phase mechanism — same clarity as a sales funnel, applied to DFY delivery. */
+const PHASES = [
+  {
+    n: "01",
+    title: "Align on the offer",
+    body: "We lock your service area, offer, CTA, and landing page so ads and follow-up point at the same job.",
+  },
+  {
+    n: "02",
+    title: "Stand up capture + follow-up",
+    body: "Lead forms, instant notifications, and AI email sequences so hot leads don’t cool off while you’re on site.",
+  },
+  {
+    n: "03",
+    title: "Launch creative & campaigns",
+    body: "Ad copy and Figma creative for Google and Meta—ready to run, not another brainstorm deck.",
+  },
+  {
+    n: "04",
+    title: "Measure and tighten",
+    body: "Supabase tracking plus weekly optimization so spend moves toward booked revenue, not vanity metrics.",
+  },
+];
 
 export function HowItWorks() {
   return (
-    <AnimatedSection id="how" className="scroll-mt-24 py-16 sm:py-20">
+    <AnimatedSection id="how" className="scroll-mt-24 bg-ink py-20 text-white sm:py-28">
       <Container>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-semibold tracking-tight text-brand-900 sm:text-3xl">
-              How it works (three simple steps)
-            </h2>
-            <p className="mt-4 leading-relaxed text-slate-600">
-              You stay focused on customers and crews—we implement the systems, creative, and campaign support behind
-              the scenes.
-            </p>
-          </div>
-          <div className="text-xs font-semibold text-teal-700">Typical setup: under 7 days</div>
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-signal">How it works</p>
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            From brief to booked work—in four clear phases.
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-white/65">
+            You stay on the tools. We install the revenue system: intake, automation, creative, and ongoing optimization.
+          </p>
         </div>
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
-          <Step
-            number="1"
-            title="We align on your offer &amp; service area"
-            body="We set up lead capture on your site or landing pages, notifications, and tracking—tuned for Victoria, BC and surrounding areas."
-          />
-          <Step
-            number="2"
-            title="Automation &amp; creative go live"
-            body="AI-assisted email replies, follow-up sequences, and ad creative/campaign assets are activated and tested."
-          />
-          <Step
-            number="3"
-            title="You measure, we optimize"
-            body="Analytics and performance reviews inform ongoing improvements so leads convert into booked revenue."
-          />
-        </div>
+        <ol className="mt-14 grid gap-0 border-t border-white/15 md:grid-cols-2 lg:grid-cols-4">
+          {PHASES.map((phase) => (
+            <li
+              key={phase.n}
+              className="border-b border-white/15 px-0 py-8 md:border-b-0 md:border-r md:px-6 md:py-10 md:first:pl-0 md:last:border-r-0 md:last:pr-0"
+            >
+              <div className="font-display text-sm font-bold tracking-[0.2em] text-signal">{phase.n}</div>
+              <h3 className="mt-4 font-display text-xl font-bold text-white">{phase.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/60">{phase.body}</p>
+            </li>
+          ))}
+        </ol>
+
+        <p className="mt-10 text-sm text-white/50">Typical setup: under 7 days after we have your campaign brief.</p>
       </Container>
     </AnimatedSection>
   );

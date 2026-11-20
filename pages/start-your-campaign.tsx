@@ -17,22 +17,19 @@ export default function StartYourCampaignPage() {
         <meta property="og:description" content={description} />
       </Head>
 
-      <div className="min-h-screen bg-hero-mesh">
-        <header className="sticky top-0 z-50 border-b border-slate-200/90 bg-white/85 backdrop-blur-md">
+      <div className="min-h-screen bg-paper">
+        <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/95 backdrop-blur-md">
           <Container className="flex h-16 items-center justify-between">
-            <a href="/" className="flex items-center gap-2.5">
-              <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-teal-600 to-brand-900 text-xs font-bold tracking-tight text-white shadow-md shadow-teal-900/15">
+            <a href="/" className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center bg-ink text-[11px] font-bold tracking-[0.12em] text-white">
                 VL
-              </div>
+              </span>
               <div className="leading-tight">
-                <div className="text-sm font-semibold text-brand-900">Victoria Leads AI</div>
-                <div className="text-xs text-slate-500">Campaign brief</div>
+                <div className="font-display text-base font-bold text-ink">Victoria Leads</div>
+                <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink/45">Campaign brief</div>
               </div>
             </a>
-            <a
-              href="/"
-              className="text-sm font-medium text-slate-600 transition hover:text-brand-900"
-            >
+            <a href="/" className="text-sm font-medium text-ink/60 transition hover:text-ink">
               Back to home
             </a>
           </Container>
@@ -41,15 +38,15 @@ export default function StartYourCampaignPage() {
         <main>
           <Container className="py-12 sm:py-16">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-teal-800">Client intake</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-brand-900 sm:text-4xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">Client intake</p>
+              <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
                 Tell us about the campaign you want to run
               </h1>
-              <p className="mt-4 text-base text-slate-600 sm:text-lg">
+              <p className="mt-4 text-base text-ink/65 sm:text-lg">
                 A few focused questions help us understand your business, your customers, and what a winning campaign
                 looks like—so we can move fast with clear recommendations.
               </p>
-              <p className="mt-3 text-sm font-medium text-slate-700">
+              <p className="mt-3 text-sm font-medium text-ink/80">
                 This only takes a few minutes. You can move step by step—save the thinking for the fields, not the form.
               </p>
             </div>
@@ -60,20 +57,20 @@ export default function StartYourCampaignPage() {
           </Container>
         </main>
 
-        <footer className="border-t border-slate-200/90 bg-white/80 py-8">
-          <Container className="flex flex-col items-center justify-between gap-4 text-center text-sm text-slate-600 sm:flex-row sm:text-left">
+        <footer className="border-t border-ink/10 bg-paper py-8">
+          <Container className="flex flex-col items-center justify-between gap-4 text-center text-sm text-ink/60 sm:flex-row sm:text-left">
             <div>
-              <div className="font-semibold text-brand-900">Victoria Leads AI</div>
-              <div className="text-xs text-slate-500">Victoria, BC &amp; surrounding areas</div>
+              <div className="font-display font-bold text-ink">Victoria Leads</div>
+              <div className="text-xs text-ink/45">Victoria, BC &amp; surrounding areas</div>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <a href="/#how" className="transition hover:text-brand-900">
+              <a href="/#how" className="transition hover:text-ink">
                 How it works
               </a>
-              <a href="/#pricing" className="transition hover:text-brand-900">
+              <a href="/#pricing" className="transition hover:text-ink">
                 Pricing
               </a>
-              <a href="mailto:info@victorialeads.ca" className="transition hover:text-brand-900">
+              <a href="mailto:info@victorialeads.ca" className="transition hover:text-ink">
                 info@victorialeads.ca
               </a>
             </div>
