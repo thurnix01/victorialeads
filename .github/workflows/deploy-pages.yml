@@ -52,7 +52,7 @@ jobs:
           test -f out/og-image.jpg
           grep -q 'google-site-verification' out/index.html
           grep -q 'GTM-P2L473TN' out/index.html
-          grep -q 'zguq0csup5' out/index.html
+          grep -R -q 'zguq0csup5' out/_next/static/chunks
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
