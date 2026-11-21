@@ -2,6 +2,7 @@ import { Seo } from "@/components/Seo";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Problem } from "@/components/Problem";
+import { TradeParallax } from "@/components/TradeParallax";
 import { VictoriaMap } from "@/components/VictoriaMap";
 import { Solution } from "@/components/Solution";
 import { HowItWorks } from "@/components/HowItWorks";
@@ -22,6 +23,7 @@ export default function Home() {
         <main>
           <Hero />
           <Problem />
+          <TradeParallax />
           <VictoriaMap />
           <HowItWorks />
           <Solution />
