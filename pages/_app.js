@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { Syne, IBM_Plex_Sans } from "next/font/google";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
+import { MicrosoftClarity } from "@/components/MicrosoftClarity";
 
 /** Display: Syne — geometric, less “default SaaS” than Inter. Body: IBM Plex Sans — industrial clarity. */
 const display = Syne({
@@ -21,6 +22,7 @@ export default function App({ Component, pageProps }) {
   return (
     <div className={`${display.variable} ${sans.variable} font-sans`}>
       <GoogleTagManager />
+      <MicrosoftClarity />
       <Component {...pageProps} />
     </div>
   );
