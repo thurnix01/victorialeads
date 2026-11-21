@@ -13,10 +13,12 @@ victorialeads.ca form
 
 ## 1) Google Sheets
 
-1. Create a spreadsheet **Victoria Leads Intake**.
-2. Tab **Demo Leads** — paste headers from `google-sheet-headers-demo.csv`.
-3. Tab **Campaign Briefs** — paste headers from `google-sheet-headers-brief.csv`.
-4. Copy the Sheet ID from the URL.
+Spreadsheet: [Victoria Leads Intake](https://docs.google.com/spreadsheets/d/1WERuFEVj_5mseGQBiqkCh557ayLKREALWWiDz3-TPZc/edit)
+
+Sheet ID (already in the workflow JSONs): `1WERuFEVj_5mseGQBiqkCh557ayLKREALWWiDz3-TPZc`
+
+1. Tab **Demo Leads** — paste headers from `google-sheet-headers-demo.csv` (row 1).
+2. Tab **Campaign Briefs** — paste headers from `google-sheet-headers-brief.csv` (row 1).
 
 ## 2) Import workflows in n8n
 
