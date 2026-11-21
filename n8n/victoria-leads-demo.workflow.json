@@ -6,9 +6,9 @@
         "httpMethod": "POST",
         "path": "victoria-leads-demo",
         "responseMode": "onReceived",
-        "responseData": "firstEntryJson",
         "options": {
           "rawBody": true,
+          "responseData": "{\"ok\":true}",
           "allowedOrigins": "https://victorialeads.ca,https://www.victorialeads.ca,http://localhost:3000,http://127.0.0.1:3000"
         }
       },
@@ -21,7 +21,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first();\nconst raw = item.json.body ?? item.json.data ?? item.json;\nlet parsed = raw;\nif (typeof raw === 'string') {\n  try { parsed = JSON.parse(raw); } catch (e) { throw new Error('Webhook body is not valid JSON'); }\n} else if (raw && typeof raw === 'object' && typeof raw.body === 'string') {\n  parsed = JSON.parse(raw.body);\n}\nreturn [{\n  json: {\n    submitted_at: parsed.submitted_at || new Date().toISOString(),\n    full_name: parsed.full_name || '',\n    email: parsed.email || '',\n    phone: parsed.phone || '',\n    business_name: parsed.business_name || '',\n    lead_source: parsed.lead_source || 'victorialeads.ca',\n    status: parsed.status || 'new',\n    source: parsed.source || 'victorialeads.ca',\n  },\n}];"
+        "jsCode": "const item = $input.first();\nconst raw = item.json.body ?? item.json.data ?? item.json;\nlet parsed = raw;\nif (typeof raw === 'string') {\n  try { parsed = JSON.parse(raw); } catch (e) { throw new Error('Webhook body is not valid JSON'); }\n} else if (raw && typeof raw === 'object' && typeof raw.body === 'string') {\n  try { parsed = JSON.parse(raw.body); } catch (e) { parsed = raw; }\n}\nreturn [{\n  json: {\n    'Submitted At': parsed.submitted_at || new Date().toISOString(),\n    'Full Name': parsed.full_name || '',\n    Email: parsed.email || '',\n    Phone: parsed.phone || '',\n    'Business Name': parsed.business_name || '',\n    'Lead Source': parsed.lead_source || 'victorialeads.ca',\n    Status: parsed.status || 'new',\n    Source: parsed.source || 'victorialeads.ca',\n    submitted_at: parsed.submitted_at || new Date().toISOString(),\n    full_name: parsed.full_name || '',\n    email: parsed.email || '',\n    phone: parsed.phone || '',\n    business_name: parsed.business_name || '',\n    lead_source: parsed.lead_source || 'victorialeads.ca',\n  },\n}];"
       },
       "id": "vl-demo-parse",
       "name": "Parse Payload",
@@ -43,17 +43,8 @@
           "value": "Demo Leads"
         },
         "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Submitted At": "={{ $json.submitted_at }}",
-            "Full Name": "={{ $json.full_name }}",
-            "Email": "={{ $json.email }}",
-            "Phone": "={{ $json.phone }}",
-            "Business Name": "={{ $json.business_name }}",
-            "Lead Source": "={{ $json.lead_source }}",
-            "Status": "={{ $json.status }}",
-            "Source": "={{ $json.source }}"
-          }
+          "mappingMode": "autoMapInputData",
+          "value": {}
         },
         "options": {}
       },
@@ -68,8 +59,8 @@
         "resource": "message",
         "operation": "send",
         "toRecipients": "info@victorialeads.ca",
-        "subject": "=New Victoria Leads demo request: {{ $json.business_name }}",
-        "bodyContent": "=<h2>New demo request</h2><p><strong>{{ $json.full_name }}</strong> from <strong>{{ $json.business_name }}</strong></p><p>Email: {{ $json.email }}<br>Phone: {{ $json.phone }}</p><p>Source: {{ $json.lead_source }}<br>Submitted: {{ $json.submitted_at }}</p>",
+        "subject": "=New Victoria Leads demo request: {{ $json['Business Name'] || $json.business_name }}",
+        "bodyContent": "=<h2>New demo request</h2><p><strong>{{ $json['Full Name'] || $json.full_name }}</strong> from <strong>{{ $json['Business Name'] || $json.business_name }}</strong></p><p>Email: {{ $json.Email || $json.email }}<br>Phone: {{ $json.Phone || $json.phone }}</p><p>Source: {{ $json['Lead Source'] || $json.lead_source }}<br>Submitted: {{ $json['Submitted At'] || $json.submitted_at }}</p>",
         "additionalFields": {
           "bodyContentType": "html"
         }

@@ -6,9 +6,9 @@
         "httpMethod": "POST",
         "path": "victoria-leads-campaign-brief",
         "responseMode": "onReceived",
-        "responseData": "firstEntryJson",
         "options": {
           "rawBody": true,
+          "responseData": "{\"ok\":true}",
           "allowedOrigins": "https://victorialeads.ca,https://www.victorialeads.ca,http://localhost:3000,http://127.0.0.1:3000"
         }
       },
@@ -21,7 +21,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first();\nconst raw = item.json.body ?? item.json.data ?? item.json;\nlet parsed = raw;\nif (typeof raw === 'string') {\n  try { parsed = JSON.parse(raw); } catch (e) { throw new Error('Webhook body is not valid JSON'); }\n} else if (raw && typeof raw === 'object' && typeof raw.body === 'string') {\n  parsed = JSON.parse(raw.body);\n}\nreturn [{\n  json: {\n    submitted_at: parsed.submitted_at || new Date().toISOString(),\n    business_name: parsed.business_name || '',\n    business_type: parsed.business_type || '',\n    contact_name: parsed.contact_name || '',\n    contact_email: parsed.contact_email || '',\n    phone: parsed.phone || '',\n    service_area: parsed.service_area || '',\n    core_services: parsed.core_services || '',\n    offer: parsed.offer || '',\n    trust_points: parsed.trust_points || '',\n    landing_page_url: parsed.landing_page_url || '',\n    campaign_goal: parsed.campaign_goal || '',\n    cta: parsed.cta || '',\n    notes: parsed.notes || '',\n    status: parsed.status || 'submitted',\n    source: parsed.source || 'victorialeads.ca',\n  },\n}];"
+        "jsCode": "const item = $input.first();\nconst raw = item.json.body ?? item.json.data ?? item.json;\nlet parsed = raw;\nif (typeof raw === 'string') {\n  try { parsed = JSON.parse(raw); } catch (e) { throw new Error('Webhook body is not valid JSON'); }\n} else if (raw && typeof raw === 'object' && typeof raw.body === 'string') {\n  try { parsed = JSON.parse(raw.body); } catch (e) { parsed = raw; }\n}\nreturn [{\n  json: {\n    'Submitted At': parsed.submitted_at || new Date().toISOString(),\n    'Business Name': parsed.business_name || '',\n    'Business Type': parsed.business_type || '',\n    'Contact Name': parsed.contact_name || '',\n    'Contact Email': parsed.contact_email || '',\n    Phone: parsed.phone || '',\n    'Service Area': parsed.service_area || '',\n    'Core Services': parsed.core_services || '',\n    Offer: parsed.offer || '',\n    'Trust Points': parsed.trust_points || '',\n    'Landing Page URL': parsed.landing_page_url || '',\n    'Campaign Goal': parsed.campaign_goal || '',\n    CTA: parsed.cta || '',\n    Notes: parsed.notes || '',\n    Status: parsed.status || 'submitted',\n    Source: parsed.source || 'victorialeads.ca',\n    business_name: parsed.business_name || '',\n    business_type: parsed.business_type || '',\n    contact_name: parsed.contact_name || '',\n    contact_email: parsed.contact_email || '',\n    phone: parsed.phone || '',\n    service_area: parsed.service_area || '',\n    core_services: parsed.core_services || '',\n    offer: parsed.offer || '',\n    landing_page_url: parsed.landing_page_url || '',\n    campaign_goal: parsed.campaign_goal || '',\n    cta: parsed.cta || '',\n    notes: parsed.notes || '',\n  },\n}];"
       },
       "id": "vl-brief-parse",
       "name": "Parse Payload",
@@ -43,25 +43,8 @@
           "value": "Campaign Briefs"
         },
         "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Submitted At": "={{ $json.submitted_at }}",
-            "Business Name": "={{ $json.business_name }}",
-            "Business Type": "={{ $json.business_type }}",
-            "Contact Name": "={{ $json.contact_name }}",
-            "Contact Email": "={{ $json.contact_email }}",
-            "Phone": "={{ $json.phone }}",
-            "Service Area": "={{ $json.service_area }}",
-            "Core Services": "={{ $json.core_services }}",
-            "Offer": "={{ $json.offer }}",
-            "Trust Points": "={{ $json.trust_points }}",
-            "Landing Page URL": "={{ $json.landing_page_url }}",
-            "Campaign Goal": "={{ $json.campaign_goal }}",
-            "CTA": "={{ $json.cta }}",
-            "Notes": "={{ $json.notes }}",
-            "Status": "={{ $json.status }}",
-            "Source": "={{ $json.source }}"
-          }
+          "mappingMode": "autoMapInputData",
+          "value": {}
         },
         "options": {}
       },
@@ -76,8 +59,8 @@
         "resource": "message",
         "operation": "send",
         "toRecipients": "info@victorialeads.ca",
-        "subject": "=New campaign brief: {{ $json.business_name }}",
-        "bodyContent": "=<h2>New campaign brief</h2><p><strong>{{ $json.business_name }}</strong> ({{ $json.business_type }})</p><p>Contact: {{ $json.contact_name }} &lt;{{ $json.contact_email }}&gt;<br>Phone: {{ $json.phone }}</p><p>Area: {{ $json.service_area }}<br>Goal: {{ $json.campaign_goal }}<br>CTA: {{ $json.cta }}</p><p>Services: {{ $json.core_services }}</p><p>Offer: {{ $json.offer }}</p><p>Landing: {{ $json.landing_page_url }}</p><p>Notes: {{ $json.notes }}</p>",
+        "subject": "=New campaign brief: {{ $json['Business Name'] || $json.business_name }}",
+        "bodyContent": "=<h2>New campaign brief</h2><p><strong>{{ $json['Business Name'] || $json.business_name }}</strong> ({{ $json['Business Type'] || $json.business_type }})</p><p>Contact: {{ $json['Contact Name'] || $json.contact_name }} &lt;{{ $json['Contact Email'] || $json.contact_email }}&gt;<br>Phone: {{ $json.Phone || $json.phone }}</p><p>Area: {{ $json['Service Area'] || $json.service_area }}<br>Goal: {{ $json['Campaign Goal'] || $json.campaign_goal }}<br>CTA: {{ $json.CTA || $json.cta }}</p><p>Services: {{ $json['Core Services'] || $json.core_services }}</p><p>Offer: {{ $json.Offer || $json.offer }}</p><p>Landing: {{ $json['Landing Page URL'] || $json.landing_page_url }}</p><p>Notes: {{ $json.Notes || $json.notes }}</p>",
         "additionalFields": {
           "bodyContentType": "html"
         }
