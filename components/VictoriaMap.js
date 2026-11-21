@@ -3,6 +3,7 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import {
+  MAP_VIEW_BOX,
   VICTORIA_ZONES,
   ZONE_DATA_NOTE,
   formatCount,
@@ -23,6 +24,12 @@ export function VictoriaMap() {
     [],
   );
 
+  // Draw larger / denser zones first so smaller municipalities stay clickable on edges
+  const paintOrder = useMemo(
+    () => [...VICTORIA_ZONES].sort((a, b) => b.employers - a.employers),
+    [],
+  );
+
   return (
     <AnimatedSection id="market-map" className="scroll-mt-24 bg-ink py-20 text-white sm:py-28">
       <Container>
@@ -33,7 +40,7 @@ export function VictoriaMap() {
               See how crowded each zone is.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-white/65">
-              Hover a municipality. Darker sea = denser employer base. We use this to lock{" "}
+              Real CRD municipal boundaries. Darker sea = denser employer base. We use this to lock{" "}
               <span className="text-white/90">one trade per area</span>—so you’re not bidding against ten other trucks
               for the same lead.
             </p>
@@ -41,7 +48,6 @@ export function VictoriaMap() {
             <div className="mt-8 border border-white/15 bg-white/[0.04] p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-signal">Selected zone</p>
               <h3 className="mt-3 font-display text-2xl font-bold text-white">{active.name}</h3>
-              {active.note ? <p className="mt-1 text-xs text-white/45">{active.note}</p> : null}
               <p className="mt-4 font-display text-4xl font-extrabold tracking-tight text-sea-bright">
                 {formatCount(active.employers)}
               </p>
@@ -53,7 +59,7 @@ export function VictoriaMap() {
               </a>
             </div>
 
-            <ol className="mt-6 max-h-48 space-y-1 overflow-y-auto pr-1 text-sm text-white/55 sm:max-h-56">
+            <ol className="mt-6 max-h-52 space-y-1 overflow-y-auto pr-1 text-sm text-white/55 sm:max-h-64">
               {ranked.map((z, i) => (
                 <li key={z.id}>
                   <button
@@ -78,51 +84,66 @@ export function VictoriaMap() {
           </div>
 
           <div className="lg:col-span-7">
-            <div className="relative overflow-hidden border border-white/10 bg-[#0a121a] p-3 sm:p-5">
+            <div className="relative overflow-hidden border border-white/10 bg-[#0a121a] p-2 sm:p-4">
               <svg
-                viewBox="0 0 640 620"
+                viewBox={MAP_VIEW_BOX}
                 className="h-auto w-full"
                 role="img"
-                aria-label="Interactive map of Greater Victoria municipalities"
+                aria-label="Interactive map of Capital Regional District municipalities"
               >
-                {/* water / canvas */}
-                <rect width="640" height="620" fill="#0a121a" />
+                <rect width="100%" height="100%" fill="#0a121a" />
 
-                {VICTORIA_ZONES.map((zone) => {
+                {paintOrder.map((zone) => {
                   const isHot = hoverId === zone.id || activeId === zone.id;
                   return (
-                    <g key={zone.id}>
-                      <path
-                        d={zone.path}
-                        fill={zoneFill(zone.employers, hoverId === zone.id, activeId === zone.id)}
-                        stroke={isHot ? "#c9851a" : "#0d1520"}
-                        strokeWidth={isHot ? 2.25 : 1.25}
-                        className="cursor-pointer transition-[fill,stroke] duration-200 ease-out"
-                        onMouseEnter={() => setHoverId(zone.id)}
-                        onMouseLeave={() => setHoverId(null)}
-                        onClick={() => setActiveId(zone.id)}
-                      />
-                      <text
-                        x={zone.label.x}
-                        y={zone.label.y}
-                        textAnchor="middle"
-                        className="pointer-events-none select-none"
-                        fill={isHot ? "#fff" : "rgba(255,255,255,0.72)"}
-                        fontSize={zone.employers > 2000 ? 13 : 11}
-                        fontWeight="600"
-                        style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
-                      >
-                        {zone.name}
-                      </text>
-                    </g>
+                    <path
+                      key={zone.id}
+                      d={zone.path}
+                      fill={zoneFill(zone.employers, hoverId === zone.id, activeId === zone.id)}
+                      stroke={isHot ? "#c9851a" : "#0d1520"}
+                      strokeWidth={isHot ? 1.75 : 0.9}
+                      strokeLinejoin="round"
+                      className="cursor-pointer transition-[fill,stroke] duration-150 ease-out"
+                      onMouseEnter={() => setHoverId(zone.id)}
+                      onMouseLeave={() => setHoverId(null)}
+                      onClick={() => setActiveId(zone.id)}
+                    />
                   );
                 })}
 
-                <g transform="translate(460, 545)">
-                  <rect width="150" height="52" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+                {VICTORIA_ZONES.map((zone) => {
+                  const isHot = hoverId === zone.id || activeId === zone.id;
+                  const short =
+                    zone.name === "Central Saanich"
+                      ? "C. Saanich"
+                      : zone.name === "North Saanich"
+                        ? "N. Saanich"
+                        : zone.name === "View Royal"
+                          ? "View Royal"
+                          : zone.name;
+                  return (
+                    <text
+                      key={`label-${zone.id}`}
+                      x={zone.label.x}
+                      y={zone.label.y}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      className="pointer-events-none select-none"
+                      fill={isHot ? "#ffffff" : "rgba(255,255,255,0.78)"}
+                      fontSize={zone.employers > 3000 ? 14 : zone.employers > 700 ? 12 : 10}
+                      fontWeight="600"
+                      style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+                    >
+                      {short}
+                    </text>
+                  );
+                })}
+
+                <g transform="translate(520, 720)">
+                  <rect width="170" height="44" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
                   <text
                     x="12"
-                    y="22"
+                    y="18"
                     fill="rgba(255,255,255,0.7)"
                     fontSize="11"
                     style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
@@ -131,12 +152,12 @@ export function VictoriaMap() {
                   </text>
                   <text
                     x="12"
-                    y="40"
+                    y="34"
                     fill="rgba(255,255,255,0.4)"
                     fontSize="10"
                     style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
                   >
-                    N ↑ · hover a zone
+                    N ↑ · CRD municipalities
                   </text>
                 </g>
               </svg>
