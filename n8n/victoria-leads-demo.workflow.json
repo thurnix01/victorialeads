@@ -1,0 +1,107 @@
+{
+  "name": "Victoria Leads — Demo Lead Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "victoria-leads-demo",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson",
+        "options": {
+          "rawBody": true,
+          "allowedOrigins": "https://victorialeads.ca,https://www.victorialeads.ca,http://localhost:3000,http://127.0.0.1:3000"
+        }
+      },
+      "id": "vl-demo-webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "victoria-leads-demo"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst raw = item.json.body ?? item.json.data ?? item.json;\nlet parsed = raw;\nif (typeof raw === 'string') {\n  try { parsed = JSON.parse(raw); } catch (e) { throw new Error('Webhook body is not valid JSON'); }\n} else if (raw && typeof raw === 'object' && typeof raw.body === 'string') {\n  parsed = JSON.parse(raw.body);\n}\nreturn [{\n  json: {\n    submitted_at: parsed.submitted_at || new Date().toISOString(),\n    full_name: parsed.full_name || '',\n    email: parsed.email || '',\n    phone: parsed.phone || '',\n    business_name: parsed.business_name || '',\n    lead_source: parsed.lead_source || 'victorialeads.ca',\n    status: parsed.status || 'new',\n    source: parsed.source || 'victorialeads.ca',\n  },\n}];"
+      },
+      "id": "vl-demo-parse",
+      "name": "Parse Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_GOOGLE_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Demo Leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Submitted At": "={{ $json.submitted_at }}",
+            "Full Name": "={{ $json.full_name }}",
+            "Email": "={{ $json.email }}",
+            "Phone": "={{ $json.phone }}",
+            "Business Name": "={{ $json.business_name }}",
+            "Lead Source": "={{ $json.lead_source }}",
+            "Status": "={{ $json.status }}",
+            "Source": "={{ $json.source }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "vl-demo-sheets",
+      "name": "Append to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [520, 0],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_AFTER_CONNECTING_GOOGLE",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "info@victorialeads.ca",
+        "subject": "=New Victoria Leads demo request: {{ $json.business_name }}",
+        "message": "=<h2>New demo request</h2><p><strong>{{ $json.full_name }}</strong> from <strong>{{ $json.business_name }}</strong></p><p>Email: {{ $json.email }}<br>Phone: {{ $json.phone }}</p><p>Source: {{ $json.lead_source }}<br>Submitted: {{ $json.submitted_at }}</p>",
+        "options": {}
+      },
+      "id": "vl-demo-gmail",
+      "name": "Email Internal Notification",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [780, 0],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_AFTER_CONNECTING_GMAIL",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Parse Payload", "type": "main", "index": 0 }]]
+    },
+    "Parse Payload": {
+      "main": [[{ "node": "Append to Google Sheets", "type": "main", "index": 0 }]]
+    },
+    "Append to Google Sheets": {
+      "main": [[{ "node": "Email Internal Notification", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

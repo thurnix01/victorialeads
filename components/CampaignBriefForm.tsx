@@ -1,18 +1,12 @@
 /**
  * Multi-step campaign brief for local trades / service businesses.
  *
- * Supabase browser client: set in `.env.local` (see `lib/supabase.js`):
- *   NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
- *   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
- *
- * Inserts into `campaign_briefs` (override with NEXT_PUBLIC_SUPABASE_CAMPAIGN_BRIEFS_TABLE).
- * Do not send `created_at` — let the column default / DB trigger set it.
+ * Posts to n8n (Oracle + Cloudflare → n8n.cbhrcom.com). Override with:
+ *   NEXT_PUBLIC_N8N_BRIEF_WEBHOOK_URL=https://n8n.cbhrcom.com/webhook/victoria-leads-campaign-brief
  */
 import { useMemo, useState, type ReactNode } from "react";
 import { Button } from "@/components/Button";
-import { supabase } from "@/lib/supabase";
 import {
-  CAMPAIGN_BRIEFS_TABLE,
   CAMPAIGN_GOAL_OPTIONS,
   INITIAL_CAMPAIGN_BRIEF_VALUES,
   campaignGoalLabel,
@@ -20,7 +14,7 @@ import {
   type CampaignBriefFormValues,
   type CampaignGoalSlug,
 } from "@/lib/campaignBrief";
-import { supabaseErrorMessage } from "@/lib/supabaseErrors";
+import { briefWebhookUrl, submitToN8n } from "@/lib/n8nSubmit";
 import { onCampaignBriefSuccess } from "@/lib/tracking";
 
 const STEPS = [
@@ -174,24 +168,27 @@ export function CampaignBriefForm() {
     setTouchedSteps({ 1: true, 2: true, 3: true, 4: true, 5: true });
     if (!validateAll()) return;
 
-    if (!supabase) {
-      setSubmitError("Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local.");
-      return;
-    }
-
     setIsSubmitting(true);
     const row = toCampaignBriefInsert(values);
 
     try {
-      const { error } = await supabase.from(CAMPAIGN_BRIEFS_TABLE).insert([row]);
-      if (error) throw error;
+      await submitToN8n(briefWebhookUrl(), {
+        event: "campaign_brief_submitted",
+        submitted_at: new Date().toISOString(),
+        source: "victorialeads.ca",
+        ...row,
+      });
       void onCampaignBriefSuccess(values, row);
       setIsSuccess(true);
       setValues(INITIAL_CAMPAIGN_BRIEF_VALUES);
       setStep(1);
       setTouchedSteps({});
     } catch (e: unknown) {
-      setSubmitError(supabaseErrorMessage(e));
+      setSubmitError(
+        e instanceof Error
+          ? e.message
+          : "Something went wrong while saving your brief. Check that n8n is online.",
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -1,13 +1,9 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/Button";
-import { supabase } from "@/lib/supabase";
-import { supabaseErrorMessage } from "@/lib/supabaseErrors";
+import { demoWebhookUrl, submitToN8n } from "@/lib/n8nSubmit";
 import { onDemoLeadSuccess } from "@/lib/tracking";
 
 const LEAD_SOURCE = process.env.NEXT_PUBLIC_LEAD_SOURCE || "victorialeads.ca";
-const LEAD_CLIENT_EMAIL = process.env.NEXT_PUBLIC_CLIENT_EMAIL || "info@victorialeads.ca";
-/** Supabase table name (public.my_leads_intake). Override via NEXT_PUBLIC_SUPABASE_LEADS_TABLE. */
-const LEADS_TABLE = process.env.NEXT_PUBLIC_SUPABASE_LEADS_TABLE || "my_leads_intake";
 
 function validate(values) {
   const errors = {};
@@ -79,38 +75,35 @@ export function LeadForm({ compact = false }) {
     setSubmitError("");
     setTouched({ businessName: true, name: true, email: true, phone: true });
     if (Object.keys(errors).length) return;
-  
-    if (!supabase) {
-      setSubmitError("Supabase is not configured yet. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
-      return;
-    }
-  
-    setStatus("submitting");
-  
-    try {
-      const { error } = await supabase.from(LEADS_TABLE).insert([
-        {
-          full_name: values.name,
-          email: values.email,
-          phone: values.phone,
-          business_name: values.businessName,
-          lead_source: LEAD_SOURCE,
-          status: "new",
-          notes: `Owner inbox: ${LEAD_CLIENT_EMAIL.trim()}`,
-        },
-      ]);
-  
-      if (error) throw error;
 
+    setStatus("submitting");
+
+    const payload = {
+      event: "demo_lead_submitted",
+      submitted_at: new Date().toISOString(),
+      full_name: values.name.trim(),
+      email: values.email.trim(),
+      phone: values.phone.trim(),
+      business_name: values.businessName.trim(),
+      lead_source: LEAD_SOURCE,
+      status: "new",
+      source: "victorialeads.ca",
+    };
+
+    try {
+      await submitToN8n(demoWebhookUrl(), payload);
       void onDemoLeadSuccess({
         lead_source: LEAD_SOURCE,
-        business_name: values.businessName.trim(),
+        business_name: payload.business_name,
       });
-
       setStatus("success");
     } catch (error) {
       setStatus("idle");
-      setSubmitError(supabaseErrorMessage(error, "Something went wrong while saving your request."));
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while saving your request. Check that n8n is online.",
+      );
     }
   }
 
@@ -191,9 +184,7 @@ export function LeadForm({ compact = false }) {
         {status === "submitting" ? "Submitting…" : "Book a free demo"}
       </Button>
 
-      {submitError ? (
-        <p className="text-xs font-medium text-rose-600">{submitError}</p>
-      ) : null}
+      {submitError ? <p className="text-xs font-medium text-rose-600">{submitError}</p> : null}
 
       <p className="text-xs text-slate-500">
         By submitting, you agree to be contacted about Victoria Leads AI. No spam.
@@ -201,4 +192,3 @@ export function LeadForm({ compact = false }) {
     </form>
   );
 }
-

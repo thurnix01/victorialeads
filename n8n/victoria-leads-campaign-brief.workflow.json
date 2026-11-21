@@ -1,0 +1,115 @@
+{
+  "name": "Victoria Leads — Campaign Brief Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "victoria-leads-campaign-brief",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson",
+        "options": {
+          "rawBody": true,
+          "allowedOrigins": "https://victorialeads.ca,https://www.victorialeads.ca,http://localhost:3000,http://127.0.0.1:3000"
+        }
+      },
+      "id": "vl-brief-webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "victoria-leads-campaign-brief"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst raw = item.json.body ?? item.json.data ?? item.json;\nlet parsed = raw;\nif (typeof raw === 'string') {\n  try { parsed = JSON.parse(raw); } catch (e) { throw new Error('Webhook body is not valid JSON'); }\n} else if (raw && typeof raw === 'object' && typeof raw.body === 'string') {\n  parsed = JSON.parse(raw.body);\n}\nreturn [{\n  json: {\n    submitted_at: parsed.submitted_at || new Date().toISOString(),\n    business_name: parsed.business_name || '',\n    business_type: parsed.business_type || '',\n    contact_name: parsed.contact_name || '',\n    contact_email: parsed.contact_email || '',\n    phone: parsed.phone || '',\n    service_area: parsed.service_area || '',\n    core_services: parsed.core_services || '',\n    offer: parsed.offer || '',\n    trust_points: parsed.trust_points || '',\n    landing_page_url: parsed.landing_page_url || '',\n    campaign_goal: parsed.campaign_goal || '',\n    cta: parsed.cta || '',\n    notes: parsed.notes || '',\n    status: parsed.status || 'submitted',\n    source: parsed.source || 'victorialeads.ca',\n  },\n}];"
+      },
+      "id": "vl-brief-parse",
+      "name": "Parse Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_GOOGLE_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Campaign Briefs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Submitted At": "={{ $json.submitted_at }}",
+            "Business Name": "={{ $json.business_name }}",
+            "Business Type": "={{ $json.business_type }}",
+            "Contact Name": "={{ $json.contact_name }}",
+            "Contact Email": "={{ $json.contact_email }}",
+            "Phone": "={{ $json.phone }}",
+            "Service Area": "={{ $json.service_area }}",
+            "Core Services": "={{ $json.core_services }}",
+            "Offer": "={{ $json.offer }}",
+            "Trust Points": "={{ $json.trust_points }}",
+            "Landing Page URL": "={{ $json.landing_page_url }}",
+            "Campaign Goal": "={{ $json.campaign_goal }}",
+            "CTA": "={{ $json.cta }}",
+            "Notes": "={{ $json.notes }}",
+            "Status": "={{ $json.status }}",
+            "Source": "={{ $json.source }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "vl-brief-sheets",
+      "name": "Append to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [520, 0],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_AFTER_CONNECTING_GOOGLE",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "info@victorialeads.ca",
+        "subject": "=New campaign brief: {{ $json.business_name }}",
+        "message": "=<h2>New campaign brief</h2><p><strong>{{ $json.business_name }}</strong> ({{ $json.business_type }})</p><p>Contact: {{ $json.contact_name }} &lt;{{ $json.contact_email }}&gt;<br>Phone: {{ $json.phone }}</p><p>Area: {{ $json.service_area }}<br>Goal: {{ $json.campaign_goal }}<br>CTA: {{ $json.cta }}</p><p>Services: {{ $json.core_services }}</p><p>Offer: {{ $json.offer }}</p><p>Landing: {{ $json.landing_page_url }}</p><p>Notes: {{ $json.notes }}</p>",
+        "options": {}
+      },
+      "id": "vl-brief-gmail",
+      "name": "Email Internal Notification",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [780, 0],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_AFTER_CONNECTING_GMAIL",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Parse Payload", "type": "main", "index": 0 }]]
+    },
+    "Parse Payload": {
+      "main": [[{ "node": "Append to Google Sheets", "type": "main", "index": 0 }]]
+    },
+    "Append to Google Sheets": {
+      "main": [[{ "node": "Email Internal Notification", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}
