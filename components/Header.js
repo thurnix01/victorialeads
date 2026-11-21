@@ -39,8 +39,8 @@ export function Header() {
         </a>
 
         <nav className="hidden items-center gap-7 lg:flex">
+          <NavLink href="#market-map">Market map</NavLink>
           <NavLink href="#how">How it works</NavLink>
-          <NavLink href="#system">The system</NavLink>
           <NavLink href="#pricing">Pricing</NavLink>
           <NavLink href="/start-your-campaign/">Campaign brief</NavLink>
         </nav>
