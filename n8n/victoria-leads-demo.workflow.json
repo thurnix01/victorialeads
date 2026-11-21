@@ -65,15 +65,19 @@
     },
     {
       "parameters": {
-        "sendTo": "info@victorialeads.ca",
+        "resource": "message",
+        "operation": "send",
+        "toRecipients": "info@victorialeads.ca",
         "subject": "=New Victoria Leads demo request: {{ $json.business_name }}",
-        "message": "=<h2>New demo request</h2><p><strong>{{ $json.full_name }}</strong> from <strong>{{ $json.business_name }}</strong></p><p>Email: {{ $json.email }}<br>Phone: {{ $json.phone }}</p><p>Source: {{ $json.lead_source }}<br>Submitted: {{ $json.submitted_at }}</p>",
-        "options": {}
+        "bodyContent": "=<h2>New demo request</h2><p><strong>{{ $json.full_name }}</strong> from <strong>{{ $json.business_name }}</strong></p><p>Email: {{ $json.email }}<br>Phone: {{ $json.phone }}</p><p>Source: {{ $json.lead_source }}<br>Submitted: {{ $json.submitted_at }}</p>",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
       },
-      "id": "vl-demo-gmail",
+      "id": "vl-demo-outlook",
       "name": "Email Internal Notification",
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
       "position": [780, 0]
     }
   ],

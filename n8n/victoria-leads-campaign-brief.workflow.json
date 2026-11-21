@@ -73,15 +73,19 @@
     },
     {
       "parameters": {
-        "sendTo": "info@victorialeads.ca",
+        "resource": "message",
+        "operation": "send",
+        "toRecipients": "info@victorialeads.ca",
         "subject": "=New campaign brief: {{ $json.business_name }}",
-        "message": "=<h2>New campaign brief</h2><p><strong>{{ $json.business_name }}</strong> ({{ $json.business_type }})</p><p>Contact: {{ $json.contact_name }} &lt;{{ $json.contact_email }}&gt;<br>Phone: {{ $json.phone }}</p><p>Area: {{ $json.service_area }}<br>Goal: {{ $json.campaign_goal }}<br>CTA: {{ $json.cta }}</p><p>Services: {{ $json.core_services }}</p><p>Offer: {{ $json.offer }}</p><p>Landing: {{ $json.landing_page_url }}</p><p>Notes: {{ $json.notes }}</p>",
-        "options": {}
+        "bodyContent": "=<h2>New campaign brief</h2><p><strong>{{ $json.business_name }}</strong> ({{ $json.business_type }})</p><p>Contact: {{ $json.contact_name }} &lt;{{ $json.contact_email }}&gt;<br>Phone: {{ $json.phone }}</p><p>Area: {{ $json.service_area }}<br>Goal: {{ $json.campaign_goal }}<br>CTA: {{ $json.cta }}</p><p>Services: {{ $json.core_services }}</p><p>Offer: {{ $json.offer }}</p><p>Landing: {{ $json.landing_page_url }}</p><p>Notes: {{ $json.notes }}</p>",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
       },
-      "id": "vl-brief-gmail",
+      "id": "vl-brief-outlook",
       "name": "Email Internal Notification",
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
       "position": [780, 0]
     }
   ],

@@ -2,11 +2,18 @@
 
 Site forms POST to your self-hosted n8n on Oracle (Cloudflare: `n8n.cbhrcom.com`).
 
+**Two separate workflows** (one webhook each):
+
+| File | Workflow | Webhook path | Sheet tab |
+|---|---|---|---|
+| `victoria-leads-demo.workflow.json` | Demo Lead Intake | `/webhook/victoria-leads-demo` | Demo Leads |
+| `victoria-leads-campaign-brief.workflow.json` | Campaign Brief Intake | `/webhook/victoria-leads-campaign-brief` | Campaign Briefs |
+
 ```
 victorialeads.ca form
   → HTTPS POST → n8n.cbhrcom.com/webhook/...
     → Google Sheets row
-    → Gmail to info@victorialeads.ca
+    → Outlook (Microsoft 365) to info@victorialeads.ca
 ```
 
 Spreadsheet: [Victoria Leads Intake](https://docs.google.com/spreadsheets/d/1WERuFEVj_5mseGQBiqkCh557ayLKREALWWiDz3-TPZc/edit)  
@@ -51,16 +58,18 @@ On the **Campaign Brief** workflow:
 3. Confirm sheet name = **Campaign Briefs**.
 4. Save.
 
-### C) Connect Gmail (once, reuse on both)
+### C) Connect Microsoft Outlook (once, reuse on both)
 
-1. In the Demo workflow, click **Email Internal Notification**.
-2. Credential → **Create new** → **Gmail OAuth2**.
-3. Sign in with Google (same account that can send as / to `info@victorialeads.ca`).
-4. Allow Gmail send scopes → Save credential (e.g. `Victoria Leads Gmail`).
+Mail goes through **Microsoft Outlook** (not Gmail), into your Microsoft 365 inbox (`info@victorialeads.ca`).
+
+1. In the Demo workflow, click **Email Internal Notification** (Microsoft Outlook node).
+2. Credential → **Create new** → **Microsoft Outlook OAuth2**.
+3. Sign in with the Microsoft account that owns / can send as `info@victorialeads.ca`.
+4. Allow Mail.Send (and related) scopes → Save (e.g. `Victoria Leads Outlook`).
 5. Confirm **To** = `info@victorialeads.ca`.
-6. On the Campaign Brief workflow, select that same Gmail credential → Save.
+6. On the Campaign Brief workflow, select that same Outlook credential → Save.
 
-> If Google blocks the OAuth app (“This app isn’t verified”), click **Advanced → Go to … (unsafe)** for your own Cloud project, or use the existing Google Cloud OAuth client you already use for other n8n workflows (Client ID / Secret from Google Cloud Console → Credentials).
+> First-time Microsoft OAuth needs an Azure app registration (Client ID + Secret) with redirect URI from n8n’s credential screen, and API permissions: `Mail.Send`, `Mail.ReadWrite`, `offline_access`, `openid`, `User.Read`. If you already have Outlook connected in n8n for another workflow, reuse that credential.
 
 ### D) Activate
 
