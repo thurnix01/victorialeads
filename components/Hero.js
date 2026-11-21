@@ -8,14 +8,14 @@ import { Container } from "@/components/Container";
 export function Hero() {
   return (
     <section className="relative isolate min-h-[min(92vh,920px)] overflow-hidden bg-ink text-white">
-      {/* Swap `/public/hero-victoria.jpg` for your own Victoria job-site / brand photography when ready. */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url(/hero-victoria.jpg)" }}
-        aria-hidden
+        style={{ backgroundImage: "url(/Victoria-aerial-view.jpg)" }}
+        role="img"
+        aria-label="Aerial view of Victoria Inner Harbour and the Parliament Buildings"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-r from-ink via-ink/88 to-ink/45"
+        className="absolute inset-0 bg-gradient-to-r from-ink via-ink/90 to-ink/50"
         aria-hidden
       />
       <div className="absolute inset-0 bg-grain opacity-[0.12] mix-blend-overlay" aria-hidden />
