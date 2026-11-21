@@ -22,6 +22,10 @@ Sheet ID: `1WERuFEVj_5mseGQBiqkCh557ayLKREALWWiDz3-TPZc`
 
 ---
 
+## Status
+
+Intake is live on n8n (Oracle + Cloudflare): Sheets + Outlook internal alert + client confirmation. Site forms post to `n8n.cbhrcom.com` webhooks (no Make / Supabase on submit).
+
 ## Import + connect (do this once)
 
 ### A) Import the two workflows
