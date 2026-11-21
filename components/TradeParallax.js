@@ -2,35 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Container } from "@/components/Container";
 
-const SCENES = [
-  {
-    src: "/trades/hvac.jpg",
-    alt: "Technicians inspecting a rooftop HVAC unit",
-    label: "HVAC",
-    speed: 0.16,
-    className: "left-[4%] top-[8%] w-[42%] sm:w-[38%] lg:left-[6%] lg:w-[34%]",
-  },
-  {
-    src: "/trades/plumbing.jpg",
-    alt: "Plumber fixing a sink while a homeowner looks on",
-    label: "Plumbing",
-    speed: -0.11,
-    className: "right-[3%] top-[18%] w-[46%] sm:w-[40%] lg:right-[8%] lg:top-[12%] lg:w-[36%]",
-  },
-  {
-    src: "/trades/electrical.jpg",
-    alt: "Technician working on equipment in a service van",
-    label: "On the tools",
-    speed: 0.09,
-    className: "left-[18%] bottom-[6%] w-[48%] sm:left-[22%] sm:w-[42%] lg:left-[28%] lg:w-[38%]",
-  },
-];
-
 function prefersReducedMotion() {
   if (typeof window === "undefined") return true;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+/**
+ * NOC Careers–style collage: one dominant frame + two overlapping supports.
+ * Soft parallax on the satellites only (not a random scatter).
+ */
 export function TradeParallax() {
   const sectionRef = useRef(null);
   const [offset, setOffset] = useState(0);
@@ -51,7 +31,7 @@ export function TradeParallax() {
         if (!el) return;
         const rect = el.getBoundingClientRect();
         const mid = rect.top + rect.height / 2 - window.innerHeight / 2;
-        setOffset(mid);
+        setOffset(Math.max(-120, Math.min(120, mid)));
       });
     };
 
@@ -63,48 +43,104 @@ export function TradeParallax() {
     };
   }, [motionOk]);
 
+  const up = motionOk ? offset * 0.08 : 0;
+  const down = motionOk ? offset * -0.06 : 0;
+
   return (
     <div ref={sectionRef}>
       <AnimatedSection id="crew" className="scroll-mt-24 overflow-hidden bg-fog py-20 sm:py-28">
         <Container>
-          <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">Built for crews</p>
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-              Real trades. Real job sites. Not stock dashboards.
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-ink/65">
-              The system is for owners who are already on the tools—HVAC, plumbing, electrical, roofing—and need booked
-              work without babysitting ads.
-            </p>
+          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">Built for crews</p>
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                Real trades. Real job sites. Not stock dashboards.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-ink/65">
+                The system is for owners who are already on the tools—HVAC, plumbing, electrical, roofing—and need
+                booked work without babysitting ads.
+              </p>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[420px] lg:col-span-7 lg:max-w-none lg:pl-6">
+              <div className="relative mx-auto aspect-[4/5] w-full max-w-[380px] lg:ml-auto lg:mr-[8%] lg:max-w-[400px]">
+                {/* Dominant portrait */}
+                <figure className="absolute inset-0 z-10 overflow-hidden rounded-2xl ring-1 ring-ink/10">
+                  <img
+                    src="/trades/electrical.jpg"
+                    alt="Technician working from a service van"
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-ink/75 px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+                    On the tools
+                  </figcaption>
+                </figure>
+
+                {/* Top satellite */}
+                <figure
+                  className="absolute -left-[22%] top-[6%] z-20 hidden w-[58%] overflow-hidden rounded-xl ring-1 ring-ink/10 sm:block"
+                  style={{
+                    aspectRatio: "5 / 3",
+                    transform: `translate3d(0, ${up}px, 0)`,
+                    boxShadow: "0 18px 40px -24px rgba(13, 21, 32, 0.55)",
+                    willChange: motionOk ? "transform" : undefined,
+                  }}
+                >
+                  <img
+                    src="/trades/hvac.jpg"
+                    alt="Technicians inspecting a rooftop HVAC unit"
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-ink/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                    HVAC
+                  </figcaption>
+                </figure>
+
+                {/* Bottom satellite */}
+                <figure
+                  className="absolute -left-[18%] bottom-[8%] z-20 hidden w-[62%] overflow-hidden rounded-xl ring-1 ring-ink/10 sm:block"
+                  style={{
+                    aspectRatio: "5 / 3",
+                    transform: `translate3d(0, ${down}px, 0)`,
+                    boxShadow: "0 18px 40px -24px rgba(13, 21, 32, 0.55)",
+                    willChange: motionOk ? "transform" : undefined,
+                  }}
+                >
+                  <img
+                    src="/trades/plumbing.jpg"
+                    alt="Plumber on a residential job"
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-ink/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                    Plumbing
+                  </figcaption>
+                </figure>
+              </div>
+
+              {/* Mobile: simple stack when satellites are hidden */}
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:hidden">
+                <figure className="overflow-hidden rounded-xl ring-1 ring-ink/10">
+                  <img src="/trades/hvac.jpg" alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
+                  <figcaption className="bg-ink px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                    HVAC
+                  </figcaption>
+                </figure>
+                <figure className="overflow-hidden rounded-xl ring-1 ring-ink/10">
+                  <img src="/trades/plumbing.jpg" alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
+                  <figcaption className="bg-ink px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                    Plumbing
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
           </div>
         </Container>
-
-        <div className="relative mx-auto mt-12 h-[420px] max-w-6xl px-4 sm:mt-16 sm:h-[520px] lg:h-[560px]">
-          {SCENES.map((scene) => (
-            <figure
-              key={scene.src}
-              className={[
-                "absolute overflow-hidden border border-ink/10 bg-ink/5",
-                scene.className,
-              ].join(" ")}
-              style={{
-                transform: motionOk ? `translate3d(0, ${offset * scene.speed}px, 0)` : undefined,
-                willChange: motionOk ? "transform" : undefined,
-              }}
-            >
-              <img
-                src={scene.src}
-                alt={scene.alt}
-                className="aspect-[4/5] h-full w-full object-cover sm:aspect-[5/6]"
-                loading="lazy"
-                decoding="async"
-              />
-              <figcaption className="absolute bottom-0 left-0 right-0 bg-ink/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/90">
-                {scene.label}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
       </AnimatedSection>
     </div>
   );

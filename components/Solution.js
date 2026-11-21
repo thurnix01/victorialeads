@@ -6,7 +6,7 @@ export function Solution() {
     <AnimatedSection id="system" className="scroll-mt-24 bg-paper py-20 sm:py-28">
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">The system</p>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
               One revenue engine—not a pile of tools.
@@ -40,26 +40,38 @@ export function Solution() {
             </dl>
           </div>
 
-          <div className="relative lg:col-span-6 lg:pb-10">
-            <img
-              src="/trades/roofing.jpg"
-              alt="Crew repairing a rooftop on a sunny day"
-              className="aspect-[4/5] w-full object-cover sm:aspect-[5/4] lg:aspect-[4/5]"
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="absolute inset-x-0 bottom-0 bg-ink/90 p-5 text-white sm:p-6">
-              <p className="font-display text-lg font-bold">Built for Victoria-area trades</p>
-              <p className="mt-1 text-sm text-white/65">HVAC · plumbing · electrical · roofing · home services · more</p>
+          <div className="relative mx-auto w-full max-w-[400px] lg:col-span-7 lg:max-w-none lg:pl-8">
+            <div className="relative mx-auto aspect-[4/5] w-full max-w-[380px] lg:ml-auto lg:mr-[6%] lg:max-w-[400px]">
+              <figure className="absolute inset-0 z-10 overflow-hidden rounded-2xl ring-1 ring-ink/10">
+                <img
+                  src="/trades/roofing.jpg"
+                  alt="Crew repairing a rooftop on a sunny day"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-ink/85 px-5 py-4 text-white">
+                  <p className="font-display text-lg font-bold">Built for Victoria-area trades</p>
+                  <p className="mt-1 text-sm text-white/65">HVAC · plumbing · electrical · roofing · more</p>
+                </div>
+              </figure>
+
+              <figure
+                className="absolute -left-[20%] bottom-[6%] z-20 hidden w-[48%] overflow-hidden rounded-xl ring-1 ring-ink/10 sm:block"
+                style={{
+                  aspectRatio: "4 / 5",
+                  boxShadow: "0 18px 40px -24px rgba(13, 21, 32, 0.55)",
+                }}
+              >
+                <img
+                  src="/trades/crew.jpg"
+                  alt="Two tradespeople reviewing work in a workshop"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
             </div>
-            <img
-              src="/trades/crew.jpg"
-              alt="Two tradespeople reviewing work in a workshop"
-              className="absolute -bottom-8 -left-6 z-10 hidden w-[42%] max-w-[220px] border border-ink/15 object-cover lg:block"
-              style={{ aspectRatio: "4 / 5" }}
-              loading="lazy"
-              decoding="async"
-            />
           </div>
         </div>
       </Container>
