@@ -4,7 +4,7 @@ import { Container } from "@/components/Container";
 const STACK = [
   { name: "Lead capture & notifications", value: "Included" },
   { name: "AI email replies + follow-up sequences", value: "Included" },
-  { name: "Supabase lead tracking", value: "Included" },
+  { name: "Lead log + email notifications", value: "Included" },
   { name: "AI ad copy (Google & Meta)", value: "Included" },
   { name: "Figma ad creative production", value: "Included" },
   { name: "Campaign-ready assets", value: "Included" },

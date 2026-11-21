@@ -5,18 +5,18 @@ import { Container } from "@/components/Container";
 const MILESTONES = [
   {
     label: "Week 1",
-    title: "Brief locked",
-    body: "Offer, area, CTA, and landing URL confirmed. Tracking and notifications wired.",
+    title: "You’re not guessing anymore",
+    body: "We lock what you sell, where you work, and where leads land—so every ad and reply points at the same job.",
   },
   {
     label: "Week 1–2",
-    title: "System live",
-    body: "Capture, AI follow-up, and creative assets ready. Campaigns can go live when you’re ready.",
+    title: "Leads can start coming in",
+    body: "Capture and follow-up are live. Creative is ready. Flip campaigns on when you want volume.",
   },
   {
     label: "Ongoing",
-    title: "Numbers you can discuss",
-    body: "Lead volume, cost per lead, and booked outcomes reviewed so spend stays tied to revenue.",
+    title: "You see what’s booking work",
+    body: "Short weekly check-ins on leads, cost, and booked jobs—not a vanity dashboard you’ll never open.",
   },
 ];
 

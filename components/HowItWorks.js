@@ -21,7 +21,7 @@ const PHASES = [
   {
     n: "04",
     title: "Measure and tighten",
-    body: "Supabase tracking plus weekly optimization so spend moves toward booked revenue, not vanity metrics.",
+    body: "We review lead volume, cost per lead, and booked jobs weekly—then shift spend toward what actually books work.",
   },
 ];
 

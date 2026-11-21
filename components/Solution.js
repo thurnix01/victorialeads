@@ -20,16 +20,16 @@ export function Solution() {
             <dl className="mt-10 space-y-6">
               {[
                 {
-                  t: "Lead capture that notifies you instantly",
-                  d: "Forms on your site or landing pages, routed into Supabase so nothing lives only in an inbox.",
+                  t: "Every lead hits your phone and inbox",
+                  d: "When someone requests a quote, you get notified in seconds—and the lead is logged so nothing dies in a missed call.",
                 },
                 {
-                  t: "AI follow-up that works while you work",
-                  d: "Replies and sequences that keep prospects warm until a human books the job.",
+                  t: "Prospects stay warm while you’re on site",
+                  d: "Automated replies and follow-up keep the conversation moving until you (or your team) book the job.",
                 },
                 {
-                  t: "Creative built for the platforms you run",
-                  d: "Copy and Figma assets for Google Ads and Meta—plus a campaign brief workflow when you’re ready to launch.",
+                  t: "Ads that sell the job, not a vibe",
+                  d: "Google and Meta copy + Figma creative matched to your offer, area, and CTA—so clicks become booked work.",
                 },
               ].map((row) => (
                 <div key={row.t} className="border-l-2 border-sea pl-5">
