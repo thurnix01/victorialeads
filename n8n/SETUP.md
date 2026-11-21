@@ -13,7 +13,8 @@ Site forms POST to your self-hosted n8n on Oracle (Cloudflare: `n8n.cbhrcom.com`
 victorialeads.ca form
   → HTTPS POST → n8n.cbhrcom.com/webhook/...
     → Google Sheets row
-    → Outlook (Microsoft 365) to info@victorialeads.ca
+    → Outlook to info@victorialeads.ca (internal)
+    → Outlook to the lead’s email (client confirmation)
 ```
 
 Spreadsheet: [Victoria Leads Intake](https://docs.google.com/spreadsheets/d/1WERuFEVj_5mseGQBiqkCh557ayLKREALWWiDz3-TPZc/edit)  

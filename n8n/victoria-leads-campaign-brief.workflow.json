@@ -87,6 +87,23 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [520, 120]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "toRecipients": "={{ $json.contact_email }}",
+        "subject": "We received your Victoria Leads campaign brief",
+        "bodyContent": "=<p>Hi {{ $json.contact_name }},</p><p>Thanks for submitting a campaign brief for <strong>{{ $json.business_name }}</strong>.</p><p>Our team will review your details and follow up soon with next steps for your lead campaign.</p><p>If anything changes, reply to this email anytime.</p><p>— Victoria Leads<br><a href=\"https://victorialeads.ca\">victorialeads.ca</a></p>",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "id": "vl-brief-outlook-client",
+      "name": "Email Client Confirmation",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [520, 280]
     }
   ],
   "connections": {
@@ -96,7 +113,8 @@
     "Parse Payload": {
       "main": [[
         { "node": "Append to Google Sheets", "type": "main", "index": 0 },
-        { "node": "Email Internal Notification", "type": "main", "index": 0 }
+        { "node": "Email Internal Notification", "type": "main", "index": 0 },
+        { "node": "Email Client Confirmation", "type": "main", "index": 0 }
       ]]
     }
   },
