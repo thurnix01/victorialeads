@@ -32,8 +32,8 @@ export function Hero() {
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg">
-            Done-for-you lead capture, AI follow-up, and campaign creative for trades and service businesses across
-            Victoria, BC and surrounding areas.
+            Exclusive by trade and area—so you’re the only plumber or HVAC firm we run in your zone. Leads hit you on
+            the tools. Spend stays tied to booked jobs across Victoria and the Island south.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">

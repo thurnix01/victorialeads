@@ -37,12 +37,12 @@ export function VictoriaMap() {
           <div className="lg:col-span-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-signal">Greater Victoria</p>
             <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-              See how crowded each zone is.
+              One trade per area—starting here.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-white/65">
-              Real boundaries from CRD through Mill Bay. Darker sea = denser employer base. We use this to lock{" "}
-              <span className="text-white/90">one trade per area</span>—so you’re not bidding against ten other trucks
-              for the same lead.
+              Darker sea = denser local market. We lock{" "}
+              <span className="text-white/90">one plumber, HVAC, electrician, or roofer per zone</span>—so you’re never
+              buying the same lead as the truck next door. Leads hit you on the tools; spend stays tied to booked jobs.
             </p>
 
             <div className="mt-8 border border-white/15 bg-white/[0.04] p-5 sm:p-6">
@@ -52,10 +52,11 @@ export function VictoriaMap() {
               <p className="mt-4 font-display text-4xl font-extrabold tracking-tight text-sea-bright">
                 {formatCount(active.employers)}
               </p>
-              <p className="mt-1 text-sm text-white/55">employer business locations</p>
+              <p className="mt-1 text-sm text-white/55">local business locations</p>
+              <p className="mt-1 text-xs text-white/40">All industries—used as market density for trades competition.</p>
               <a href="#demo" className="mt-6 inline-flex w-full sm:w-auto">
                 <Button as="span" variant="signal" className="w-full sm:w-auto">
-                  Lock a category here
+                  Claim this zone for your trade
                 </Button>
               </a>
             </div>

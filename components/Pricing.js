@@ -41,8 +41,8 @@ export function Pricing() {
             Exclusive by area. Two clear levels.
           </h2>
           <p className="mt-4 text-base leading-relaxed text-ink/65">
-            One business per trade per service area—so you’re never buying the same lead as your competitor. Ad spend
-            is billed separately to the platforms.
+            One trade per area. Leads to your phone while you’re on site. Optimization toward booked jobs—not vanity
+            clicks. Ad spend is billed separately to the platforms.
           </p>
         </div>
 
