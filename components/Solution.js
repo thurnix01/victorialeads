@@ -3,7 +3,7 @@ import { Container } from "@/components/Container";
 
 export function Solution() {
   return (
-    <AnimatedSection id="system" className="scroll-mt-24 overflow-hidden bg-fog py-20 sm:py-28">
+    <AnimatedSection id="system" className="scroll-mt-24 overflow-hidden bg-paper py-20 sm:py-28">
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-6">

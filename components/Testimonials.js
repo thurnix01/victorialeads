@@ -22,7 +22,7 @@ const MILESTONES = [
 
 export function Testimonials() {
   return (
-    <AnimatedSection id="proof" className="scroll-mt-24 bg-fog py-20 sm:py-28">
+    <AnimatedSection id="proof" className="scroll-mt-24 bg-paper py-20 sm:py-28">
       <Container>
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">What to expect</p>

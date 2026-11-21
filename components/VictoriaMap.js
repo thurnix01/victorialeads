@@ -40,7 +40,7 @@ export function VictoriaMap() {
               See how crowded each zone is.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-white/65">
-              Real CRD municipal boundaries. Darker sea = denser employer base. We use this to lock{" "}
+              Real boundaries from CRD through Mill Bay. Darker sea = denser employer base. We use this to lock{" "}
               <span className="text-white/90">one trade per area</span>—so you’re not bidding against ten other trucks
               for the same lead.
             </p>
@@ -48,6 +48,7 @@ export function VictoriaMap() {
             <div className="mt-8 border border-white/15 bg-white/[0.04] p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-signal">Selected zone</p>
               <h3 className="mt-3 font-display text-2xl font-bold text-white">{active.name}</h3>
+              {active.note ? <p className="mt-1 text-xs text-white/45">{active.note}</p> : null}
               <p className="mt-4 font-display text-4xl font-extrabold tracking-tight text-sea-bright">
                 {formatCount(active.employers)}
               </p>
@@ -157,7 +158,7 @@ export function VictoriaMap() {
                     fontSize="10"
                     style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
                   >
-                    N ↑ · CRD municipalities
+                    N ↑ · CRD + Cowichan A/B/C
                   </text>
                 </g>
               </svg>

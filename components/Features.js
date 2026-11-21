@@ -14,7 +14,7 @@ const STACK = [
 
 export function Features() {
   return (
-    <AnimatedSection id="features" className="scroll-mt-24 border-y border-ink/10 bg-paper py-20 sm:py-28">
+    <AnimatedSection id="features" className="scroll-mt-24 border-y border-ink/10 bg-fog py-20 sm:py-28">
       <Container>
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">

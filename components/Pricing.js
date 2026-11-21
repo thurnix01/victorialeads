@@ -33,7 +33,7 @@ const PLANS = [
 
 export function Pricing() {
   return (
-    <AnimatedSection id="pricing" className="scroll-mt-24 bg-paper py-20 sm:py-28">
+    <AnimatedSection id="pricing" className="scroll-mt-24 bg-fog py-20 sm:py-28">
       <Container>
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sea">Pricing</p>
